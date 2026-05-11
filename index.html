@@ -33,8 +33,6 @@
   th:hover{color:#444}
   td{padding:8px 10px;border-bottom:1px solid #f0f0eb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   tr:last-child td{border-bottom:none}
-  tr.row-danger td{background:#fcebeb44}
-  tr.row-warn td{background:#faeeda44}
   .tag{font-family:monospace;font-size:12px;color:#555;background:#f5f5f0;padding:2px 6px;border-radius:4px;white-space:nowrap}
   .alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:13px}
   .alert-danger{background:#fcebeb;border:1px solid #f09595}
@@ -59,10 +57,10 @@
   .btn-sm{padding:5px 12px;font-size:12px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
   .btn-sm:hover{background:#f0f0eb}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-  .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:10px}
   label{font-size:12px;color:#666;display:block;margin-bottom:4px;font-weight:500}
-  input,select{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;color:#1a1a1a}
-  input:focus,select:focus{outline:none;border-color:#888}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;color:#1a1a1a}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:#888}
+  textarea{resize:vertical;line-height:1.6}
   .search-box{padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;width:100%;margin-bottom:12px;font-family:inherit}
   .search-box:focus{outline:none;border-color:#888}
   .divider{border:none;border-top:1px solid #e5e5e0;margin:16px 0}
@@ -72,13 +70,18 @@
   .loading{text-align:center;padding:40px;color:#aaa;font-size:13px}
   .spinner{display:inline-block;width:20px;height:20px;border:2px solid #ddd;border-top-color:#888;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .diff-ok{background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px 14px;font-size:13px;color:#27500a;font-weight:500}
-  .diff-warn{background:#faeeda;border:1px solid #fac775;border-radius:8px;padding:12px 14px;font-size:13px}
-  .diff-title{font-weight:500;color:#633806;margin-bottom:8px}
-  .diff-line{margin-bottom:4px}
+  .diff-box{border-radius:8px;padding:14px 16px;font-size:13px;margin-bottom:16px}
+  .diff-ok{background:#eaf3de;border:1px solid #c0dd97;color:#27500a}
+  .diff-warn{background:#faeeda;border:1px solid #fac775}
+  .diff-title{font-weight:500;color:#633806;margin-bottom:10px;font-size:13px}
+  .diff-section-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:#888;margin:10px 0 6px}
+  .diff-line{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid #00000008}
+  .diff-line:last-child{border-bottom:none}
   .inv-detail{background:#f5f5f0;border-radius:8px;padding:12px;margin-top:8px}
+  .scan-hint{font-size:12px;color:#aaa;margin-top:6px;line-height:1.5}
+  .counter-badge{background:#1a1a1a;color:#fff;border-radius:20px;padding:2px 10px;font-size:12px;font-weight:500}
   @media(max-width:600px){
-    .form-grid,.form-grid-3{grid-template-columns:1fr}
+    .form-grid{grid-template-columns:1fr}
     .metrics{grid-template-columns:1fr 1fr}
     .topbar{padding:12px 16px}
   }
@@ -146,27 +149,51 @@
   <div id="sec-nuevo" class="section">
     <div class="card">
       <div class="card-title">Registrar nuevo inventario</div>
+
+      <!-- Paso 1: Info básica -->
       <div class="form-grid">
         <div><label>Fecha del inventario</label><input type="date" id="inv-fecha"></div>
         <div><label>Número de semana</label><input type="number" id="inv-semana" min="1" max="52"></div>
       </div>
-      <div style="margin-bottom:14px">
+      <div style="margin-bottom:16px">
         <label>Colaborador</label>
-        <select id="inv-colab" onchange="updateExpected()">
+        <select id="inv-colab" onchange="onColabChange()">
           <option value="">Seleccionar colaborador...</option>
         </select>
       </div>
-      <div id="expected-box" style="display:none;background:#f5f5f0;border-radius:8px;padding:12px;margin-bottom:14px">
-        <div style="font-weight:500;font-size:12px;margin-bottom:8px;color:#555;text-transform:uppercase;letter-spacing:.4px">Activos esperados según IT Glue</div>
+
+      <!-- Activos esperados (se muestra al elegir colaborador) -->
+      <div id="expected-box" style="display:none;margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <span style="font-weight:500;font-size:12px;color:#555;text-transform:uppercase;letter-spacing:.4px">Activos esperados en IT Glue</span>
+          <span id="expected-count" class="counter-badge">0</span>
+        </div>
         <div id="expected-list"></div>
       </div>
-      <div style="font-weight:500;font-size:12px;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Tags escaneados en físico</div>
-      <div id="tags-container"></div>
-      <button class="btn" onclick="addTagRow()" style="margin-bottom:16px;margin-top:4px">+ Agregar artículo</button>
-      <div id="diff-preview" style="display:none;margin-bottom:16px"></div>
+
+      <hr class="divider">
+
+      <!-- Paso 2: Pegar tags -->
+      <div style="margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+        <label style="margin:0">Tags escaneados con pistola</label>
+        <span id="scanned-count" style="font-size:12px;color:#aaa">0 tags</span>
+      </div>
+      <textarea
+        id="tags-textarea"
+        rows="8"
+        placeholder="Pega aquí todos los tags escaneados&#10;(uno por línea, como los exporta la pistola)&#10;&#10;Ejemplo:&#10;0001188&#10;0000416&#10;0000233&#10;0001045"
+        oninput="onTagsInput()"
+        style="font-family:monospace;font-size:13px;letter-spacing:1px;line-height:1.8"
+      ></textarea>
+      <p class="scan-hint">Pega la lista completa tal como la exporta la pistola de código de barras. El sistema compara automáticamente contra IT Glue.</p>
+
+      <!-- Resultado de comparación en tiempo real -->
+      <div id="diff-preview" style="display:none;margin-top:16px"></div>
+
       <hr class="divider">
       <div class="flex-row">
         <button class="btn btn-dark" onclick="guardarInventario()">💾 Guardar inventario</button>
+        <button class="btn" onclick="limpiarFormulario()">🗑 Limpiar</button>
         <button class="btn" onclick="showSection('dashboard')">Cancelar</button>
       </div>
     </div>
@@ -181,8 +208,10 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaICA2Juk3IErUKEIWs
 let COLABS = {};
 let ACTIVOS_ITGLUE = [];
 let HISTORIAL = JSON.parse(localStorage.getItem('oq_historial') || '[]');
-let tagCount = 0;
 
+// =====================================================
+// CARGA DE DATOS
+// =====================================================
 async function cargarDatos() {
   try {
     document.getElementById('sync-status').textContent = 'Sincronizando con IT Glue...';
@@ -221,13 +250,16 @@ function recargarDatos() {
   cargarDatos();
 }
 
+// =====================================================
+// DASHBOARD
+// =====================================================
 function renderDashboard() {
-  const ultimoInv = HISTORIAL.length > 0 ? HISTORIAL[0] : null;
-  if(ultimoInv) {
-    document.getElementById('m-fecha').textContent = ultimoInv.fecha;
-    document.getElementById('m-diff').textContent = ultimoInv.diffs;
-    document.getElementById('m-diff').style.color = ultimoInv.diffs > 0 ? '#e24b4a' : '#27500a';
-    renderAlertas(ultimoInv);
+  const ul = HISTORIAL.length > 0 ? HISTORIAL[0] : null;
+  if(ul) {
+    document.getElementById('m-fecha').textContent = ul.fecha;
+    document.getElementById('m-diff').textContent = ul.diffs;
+    document.getElementById('m-diff').style.color = ul.diffs > 0 ? '#e24b4a' : '#27500a';
+    renderAlertas(ul);
   } else {
     document.getElementById('m-fecha').textContent = 'Sin registros';
     document.getElementById('m-diff').textContent = '—';
@@ -248,7 +280,7 @@ function renderDashboard() {
       Activos registrados en IT Glue
       <input type="text" class="search-box" style="width:220px;margin:0" placeholder="🔍 Buscar colaborador..." oninput="filtrarDashboard(this.value)">
     </div>
-    <table id="dashboard-table">
+    <table>
       <thead><tr>
         <th style="width:35%" onclick="sortDashboard('nombre')">Colaborador ↕</th>
         <th style="width:12%;text-align:center" onclick="sortDashboard('activos')">Activos ↕</th>
@@ -280,10 +312,9 @@ function renderAlertas(inv) {
   if(!inv || !inv.detalle) return;
   const alertas = inv.detalle.filter(d => d.tipo_resultado !== 'ok');
   const card = document.getElementById('alertas-card');
-  const content = document.getElementById('alertas-content');
   if(alertas.length === 0) { card.style.display = 'none'; return; }
   card.style.display = 'block';
-  content.innerHTML = alertas.map(a => `
+  document.getElementById('alertas-content').innerHTML = alertas.map(a => `
     <div class="alert-item ${a.tipo_resultado === 'faltante' ? 'alert-danger' : 'alert-warn'}">
       <div>
         <div class="alert-title">${a.tipo_resultado === 'faltante' ? '✗ Faltante' : '+ Tag extra'}</div>
@@ -292,6 +323,9 @@ function renderAlertas(inv) {
     </div>`).join('');
 }
 
+// =====================================================
+// COLABORADORES
+// =====================================================
 function renderColabs(filtro) {
   const c = document.getElementById('colab-list');
   let nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar').sort();
@@ -322,14 +356,12 @@ function renderColabs(filtro) {
               <th style="width:22%">Tipo</th>
               <th>Estado</th>
             </tr></thead>
-            <tbody>
-              ${activos.map(a=>`<tr>
-                <td><span class="tag">${a.assetTag||'—'}</span></td>
-                <td title="${a.nombre}">${a.nombre}</td>
-                <td>${a.modelo}</td>
-                <td><span class="badge ${a.estado==='In use'?'badge-ok':a.estado==='Storaged'?'badge-gray':'badge-warn'}">${a.estado||'—'}</span></td>
-              </tr>`).join('')}
-            </tbody>
+            <tbody>${activos.map(a=>`<tr>
+              <td><span class="tag">${a.assetTag||'—'}</span></td>
+              <td title="${a.nombre}">${a.nombre}</td>
+              <td>${a.modelo}</td>
+              <td><span class="badge ${a.estado==='In use'?'badge-ok':a.estado==='Storaged'?'badge-gray':'badge-warn'}">${a.estado||'—'}</span></td>
+            </tr>`).join('')}</tbody>
           </table>
         </div>
       </div>`;
@@ -339,6 +371,9 @@ function renderColabs(filtro) {
 function filtrarColabs(q) { renderColabs(q); }
 function toggleColab(id) { const el=document.getElementById(id); if(el) el.classList.toggle('open'); }
 
+// =====================================================
+// HISTORIAL
+// =====================================================
 function renderHistorial() {
   const c = document.getElementById('hist-list');
   if(HISTORIAL.length === 0) {
@@ -382,6 +417,9 @@ function renderHistorial() {
 
 function toggleHist(i) { document.getElementById('hd-'+i).classList.toggle('open'); }
 
+// =====================================================
+// NUEVO INVENTARIO — lógica de pegado masivo
+// =====================================================
 function populateColabSelect() {
   const sel = document.getElementById('inv-colab');
   const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar').sort();
@@ -390,15 +428,20 @@ function populateColabSelect() {
 }
 
 function initNuevo() {
-  tagCount = 0;
-  document.getElementById('tags-container').innerHTML = '';
   document.getElementById('inv-colab').value = '';
+  document.getElementById('tags-textarea').value = '';
   document.getElementById('expected-box').style.display = 'none';
   document.getElementById('diff-preview').style.display = 'none';
+  document.getElementById('scanned-count').textContent = '0 tags';
   const today = new Date();
   document.getElementById('inv-fecha').valueAsDate = today;
   document.getElementById('inv-semana').value = getWeekNumber(today);
-  addTagRow();
+}
+
+function limpiarFormulario() {
+  document.getElementById('tags-textarea').value = '';
+  document.getElementById('diff-preview').style.display = 'none';
+  document.getElementById('scanned-count').textContent = '0 tags';
 }
 
 function getWeekNumber(d) {
@@ -407,11 +450,13 @@ function getWeekNumber(d) {
   return Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(),0,1))) / 86400000) + 1) / 7);
 }
 
-function updateExpected() {
+function onColabChange() {
   const colab = document.getElementById('inv-colab').value;
   const box = document.getElementById('expected-box');
   if (!colab || !COLABS[colab]) { box.style.display = 'none'; return; }
+  const activos = COLABS[colab];
   box.style.display = 'block';
+  document.getElementById('expected-count').textContent = activos.length;
   document.getElementById('expected-list').innerHTML = `
     <table style="font-size:12px;margin-top:4px">
       <thead><tr>
@@ -419,147 +464,163 @@ function updateExpected() {
         <th style="width:45%">Nombre</th>
         <th>Tipo</th>
       </tr></thead>
-      <tbody>${COLABS[colab].map(a=>`<tr>
+      <tbody>${activos.map(a=>`<tr>
         <td><span class="tag">${a.assetTag||'—'}</span></td>
         <td>${a.nombre}</td>
         <td>${a.modelo}</td>
       </tr>`).join('')}</tbody>
     </table>`;
-  refreshDiff();
+  // Re-corre diff si ya hay tags pegados
+  if(document.getElementById('tags-textarea').value.trim()) calcularDiff();
 }
 
-function addTagRow() {
-  const c = document.getElementById('tags-container');
-  const idx = tagCount++;
-  const div = document.createElement('div');
-  div.className = 'form-grid-3';
-  div.style.alignItems = 'end';
-  div.innerHTML = `
-    <div>
-      <label>Tipo</label>
-      <select onchange="refreshDiff()">
-        <option>Laptop</option><option>Monitor</option><option>Headset</option>
-        <option>Yubikey</option><option>Smartphone</option><option>Accesorio</option>
-      </select>
-    </div>
-    <div>
-      <label>Asset Tag escaneado</label>
-      <input type="text" placeholder="ej. 0001188" oninput="checkTagInline(${idx});refreshDiff()" id="tag-val-${idx}" style="font-family:monospace;letter-spacing:1px">
-    </div>
-    <div>
-      <label>Estado</label>
-      <div id="tag-status-${idx}" style="padding:7px 0;font-size:13px;color:#888">—</div>
-    </div>`;
-  c.appendChild(div);
+function getTagsFromTextarea() {
+  const raw = document.getElementById('tags-textarea').value;
+  // Separa por salto de línea, coma, o espacio — limpia vacíos y duplicados
+  return [...new Set(
+    raw.split(/[\n\r,]+/)
+       .map(t => t.trim())
+       .filter(t => t.length > 0)
+  )];
 }
 
-function checkTagInline(idx) {
+function onTagsInput() {
+  const tags = getTagsFromTextarea();
+  document.getElementById('scanned-count').textContent = `${tags.length} tag${tags.length!==1?'s':''}`;
   const colab = document.getElementById('inv-colab').value;
-  const inp = document.getElementById('tag-val-'+idx);
-  const st = document.getElementById('tag-status-'+idx);
-  if(!inp||!st) return;
-  const val = inp.value.trim();
-  if(!val){st.innerHTML='—';return;}
-  if(!colab){st.innerHTML='<span class="badge badge-gray">Selecciona colaborador</span>';return;}
-  const activos = COLABS[colab]||[];
-  const found = activos.find(a=>a.assetTag===val);
-  if(found){
-    st.innerHTML=`<span class="badge badge-ok">✓ ${found.nombre}</span>`;
+  if(colab && COLABS[colab] && tags.length > 0) {
+    calcularDiff();
   } else {
-    const other = Object.entries(COLABS).find(([n,arr])=>n!==colab&&arr.find(a=>a.assetTag===val));
-    if(other) st.innerHTML=`<span class="badge badge-warn">⚠ Asignado a ${other[0]}</span>`;
-    else st.innerHTML=`<span class="badge badge-danger">✗ No encontrado en IT Glue</span>`;
+    document.getElementById('diff-preview').style.display = 'none';
   }
 }
 
-function getScannedTags() {
-  const tags=[];
-  document.querySelectorAll('#tags-container .form-grid-3').forEach((row,i)=>{
-    const inp=document.getElementById('tag-val-'+i);
-    const sel=row.querySelector('select');
-    if(inp&&inp.value.trim()) tags.push({assetTag:inp.value.trim(),tipo:sel?sel.value:''});
-  });
-  return tags;
-}
+function calcularDiff() {
+  const colab = document.getElementById('inv-colab').value;
+  const box = document.getElementById('diff-preview');
+  if(!colab || !COLABS[colab]) { box.style.display = 'none'; return; }
 
-function refreshDiff() {
-  const colab=document.getElementById('inv-colab').value;
-  const box=document.getElementById('diff-preview');
-  if(!colab||!COLABS[colab]){box.style.display='none';return;}
-  const scanned=getScannedTags().map(t=>t.assetTag);
-  if(scanned.length===0){box.style.display='none';return;}
-  const expected=COLABS[colab].map(a=>a.assetTag);
-  const missing=expected.filter(t=>!scanned.includes(t));
-  const extra=scanned.filter(t=>!expected.includes(t));
-  box.style.display='block';
-  if(missing.length===0&&extra.length===0){
-    box.innerHTML=`<div class="diff-ok">✓ Sin diferencias — todos los activos coinciden con IT Glue</div>`;
+  const scanned = getTagsFromTextarea();
+  if(scanned.length === 0) { box.style.display = 'none'; return; }
+
+  const esperados = COLABS[colab];
+  const expectedTags = esperados.map(a => a.assetTag).filter(Boolean);
+  const missing = expectedTags.filter(t => !scanned.includes(t));
+  const extra = scanned.filter(t => !expectedTags.includes(t));
+  const ok = scanned.filter(t => expectedTags.includes(t));
+
+  box.style.display = 'block';
+
+  if(missing.length === 0 && extra.length === 0) {
+    box.innerHTML = `
+      <div class="diff-box diff-ok">
+        <div style="font-size:15px;font-weight:500;margin-bottom:4px">✓ Inventario completo</div>
+        <div style="font-size:13px">${ok.length} de ${expectedTags.length} activos confirmados — todo coincide con IT Glue</div>
+      </div>`;
     return;
   }
-  let html=`<div class="diff-warn"><div class="diff-title">Diferencias detectadas:</div>`;
-  missing.forEach(t=>{
-    const a=COLABS[colab].find(x=>x.assetTag===t);
-    html+=`<div class="diff-line" style="color:#791f1f">✗ Faltante: <span class="tag">${t}</span>${a?' — '+a.nombre+' ('+a.modelo+')':''}</div>`;
-  });
-  extra.forEach(t=>{
-    const other=Object.entries(COLABS).find(([n,arr])=>n!==colab&&arr.find(a=>a.assetTag===t));
-    html+=`<div class="diff-line" style="color:#633806">+ Extra: <span class="tag">${t}</span>${other?' — registrado a '+other[0]:' — no encontrado en IT Glue'}</div>`;
-  });
-  html+='</div>';
-  box.innerHTML=html;
+
+  let html = `<div class="diff-box diff-warn">
+    <div class="diff-title">
+      Diferencias detectadas — 
+      ${missing.length > 0 ? `<span style="color:#791f1f">${missing.length} faltante${missing.length!==1?'s':''}</span>` : ''}
+      ${missing.length > 0 && extra.length > 0 ? ' · ' : ''}
+      ${extra.length > 0 ? `<span style="color:#633806">${extra.length} extra${extra.length!==1?'s':''}</span>` : ''}
+    </div>`;
+
+  if(ok.length > 0) {
+    html += `<div style="font-size:12px;color:#27500a;margin-bottom:8px">✓ ${ok.length} activo${ok.length!==1?'s':''} confirmado${ok.length!==1?'s':''}</div>`;
+  }
+
+  if(missing.length > 0) {
+    html += `<div class="diff-section-title">✗ Faltantes — en IT Glue pero no escaneados</div>`;
+    missing.forEach(t => {
+      const a = esperados.find(x => x.assetTag === t);
+      html += `<div class="diff-line">
+        <span class="tag">${t}</span>
+        <span style="color:#791f1f;flex:1">${a ? a.nombre + ' · ' + a.modelo : 'Desconocido'}</span>
+        <span class="badge badge-danger">Faltante</span>
+      </div>`;
+    });
+  }
+
+  if(extra.length > 0) {
+    html += `<div class="diff-section-title">+ Extras — escaneados pero no en IT Glue para ${colab}</div>`;
+    extra.forEach(t => {
+      const other = Object.entries(COLABS).find(([n,arr]) => n !== colab && arr.find(a => a.assetTag === t));
+      const otherA = other ? other[1].find(a => a.assetTag === t) : null;
+      html += `<div class="diff-line">
+        <span class="tag">${t}</span>
+        <span style="color:#633806;flex:1">${other ? otherA.nombre + ' · asignado a ' + other[0] : 'No encontrado en IT Glue'}</span>
+        <span class="badge badge-warn">Extra</span>
+      </div>`;
+    });
+  }
+
+  html += '</div>';
+  box.innerHTML = html;
 }
 
 function guardarInventario() {
-  const fecha=document.getElementById('inv-fecha').value;
-  const semana=parseInt(document.getElementById('inv-semana').value);
-  const colab=document.getElementById('inv-colab').value;
-  if(!fecha||!semana||!colab){showToast('Completa la fecha, semana y colaborador.');return;}
-  const scannedObjs=getScannedTags();
-  if(scannedObjs.length===0){showToast('Agrega al menos un artículo escaneado.');return;}
-  const scanned=scannedObjs.map(t=>t.assetTag);
-  const esperados=COLABS[colab]||[];
-  const expectedTags=esperados.map(a=>a.assetTag);
-  const missing=expectedTags.filter(t=>!scanned.includes(t));
-  const extra=scanned.filter(t=>!expectedTags.includes(t));
-  const diffs=missing.length+extra.length;
-  const fechaFmt=new Date(fecha+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
-  const detalle=[];
-  scanned.forEach(t=>{
-    const a=esperados.find(x=>x.assetTag===t);
-    detalle.push({assetTag:t,nombre:a?a.nombre:'—',tipo:a?a.modelo:'—',tipo_resultado:a?'ok':'extra'});
+  const fecha = document.getElementById('inv-fecha').value;
+  const semana = parseInt(document.getElementById('inv-semana').value);
+  const colab = document.getElementById('inv-colab').value;
+  if(!fecha || !semana || !colab) { showToast('Completa la fecha, semana y colaborador.'); return; }
+  const scanned = getTagsFromTextarea();
+  if(scanned.length === 0) { showToast('Pega los tags escaneados primero.'); return; }
+
+  const esperados = COLABS[colab] || [];
+  const expectedTags = esperados.map(a => a.assetTag).filter(Boolean);
+  const missing = expectedTags.filter(t => !scanned.includes(t));
+  const extra = scanned.filter(t => !expectedTags.includes(t));
+  const diffs = missing.length + extra.length;
+  const fechaFmt = new Date(fecha+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+
+  const detalle = [];
+  scanned.forEach(t => {
+    const a = esperados.find(x => x.assetTag === t);
+    detalle.push({assetTag:t, nombre:a?a.nombre:'—', tipo:a?a.modelo:'—', tipo_resultado:a?'ok':'extra'});
   });
-  missing.forEach(t=>{
-    const a=esperados.find(x=>x.assetTag===t);
-    detalle.push({assetTag:t,nombre:a?a.nombre:'—',tipo:a?a.modelo:'—',tipo_resultado:'faltante'});
+  missing.forEach(t => {
+    const a = esperados.find(x => x.assetTag === t);
+    detalle.push({assetTag:t, nombre:a?a.nombre:'—', tipo:a?a.modelo:'—', tipo_resultado:'faltante'});
   });
-  const resumen=diffs===0?'Inventario completo — todos los activos coinciden con IT Glue':
-    [missing.length?missing.length+' faltante(s)':'',extra.length?extra.length+' tag(s) extra':''].filter(Boolean).join(', ');
-  const entry={semana,fecha:fechaFmt,colaborador:colab,escaneados:scanned.length,esperados:expectedTags.length,diffs,resumen,detalle};
+
+  const resumen = diffs === 0
+    ? 'Inventario completo — todos los activos coinciden con IT Glue'
+    : [missing.length ? missing.length+' faltante(s)' : '', extra.length ? extra.length+' tag(s) extra' : ''].filter(Boolean).join(', ');
+
+  const entry = {semana, fecha:fechaFmt, colaborador:colab, escaneados:scanned.length, esperados:expectedTags.length, diffs, resumen, detalle};
   HISTORIAL.unshift(entry);
-  localStorage.setItem('oq_historial',JSON.stringify(HISTORIAL));
-  document.getElementById('m-fecha').textContent=fechaFmt;
-  document.getElementById('m-diff').textContent=diffs;
-  document.getElementById('m-diff').style.color=diffs>0?'#e24b4a':'#27500a';
+  localStorage.setItem('oq_historial', JSON.stringify(HISTORIAL));
+
+  document.getElementById('m-fecha').textContent = fechaFmt;
+  document.getElementById('m-diff').textContent = diffs;
+  document.getElementById('m-diff').style.color = diffs > 0 ? '#e24b4a' : '#27500a';
+
   showToast(`Inventario semana ${semana} guardado ✓`);
-  setTimeout(()=>showSection('historial'),800);
+  setTimeout(() => showSection('historial'), 800);
 }
 
+// =====================================================
+// NAVEGACIÓN
+// =====================================================
 function showSection(id) {
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('sec-'+id).classList.add('active');
-  const map={dashboard:0,historial:1,colaboradores:2,nuevo:3};
-  if(map[id]!==undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
-  if(id==='historial') renderHistorial();
-  if(id==='colaboradores'){renderColabs();document.getElementById('colab-search').value='';}
-  if(id==='nuevo') initNuevo();
+  const map = {dashboard:0, historial:1, colaboradores:2, nuevo:3};
+  if(map[id] !== undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  if(id === 'historial') renderHistorial();
+  if(id === 'colaboradores') { renderColabs(); document.getElementById('colab-search').value = ''; }
+  if(id === 'nuevo') initNuevo();
 }
 
 function showToast(msg) {
-  const t=document.getElementById('toast');
-  t.textContent=msg;
+  const t = document.getElementById('toast');
+  t.textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 cargarDatos();
