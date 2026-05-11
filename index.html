@@ -21,7 +21,7 @@
   .metric-label{font-size:11px;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
   .metric-val{font-size:24px;font-weight:500}
   .card{background:#fff;border-radius:12px;border:1px solid #e5e5e0;padding:16px 20px;margin-bottom:16px}
-  .card-title{font-size:14px;font-weight:500;margin-bottom:14px}
+  .card-title{font-size:14px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
   .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
   .badge-ok{background:#eaf3de;color:#27500a}
   .badge-warn{background:#faeeda;color:#633806}
@@ -38,35 +38,38 @@
   .alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:13px}
   .alert-danger{background:#fcebeb;border:1px solid #f09595}
   .alert-warn{background:#faeeda;border:1px solid #fac775}
+  .alert-ok{background:#eaf3de;border:1px solid #c0dd97}
   .alert-title{font-weight:500;margin-bottom:2px}
   .alert-sub{font-size:12px;color:#666}
-  .icon{font-size:16px;flex-shrink:0;margin-top:1px}
   .hist-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #f0f0eb;cursor:pointer;border-radius:6px;transition:background .1s}
   .hist-row:hover{background:#f5f5f0;margin:0 -8px;padding:11px 8px}
   .hist-row:last-child{border-bottom:none}
-  .hist-detail{display:none;font-size:13px;color:#666;padding:8px 0 12px;border-bottom:1px solid #f0f0eb}
+  .hist-detail{display:none;font-size:13px;color:#666;padding:8px 0 12px}
   .hist-detail.open{display:block}
   .week-badge{background:#f0f0eb;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;color:#555;min-width:40px;text-align:center}
   .colab-header{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0eb;cursor:pointer}
-  .colab-header:last-of-type{border-bottom:none}
-  .avatar{width:34px;height:34px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#0c447c;flex-shrink:0}
-  .colab-assets{display:none;padding-bottom:12px;border-bottom:1px solid #f0f0eb}
+  .colab-assets{display:none;padding-bottom:12px}
   .colab-assets.open{display:block}
+  .avatar{width:34px;height:34px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#0c447c;flex-shrink:0}
   .btn{padding:9px 18px;font-size:13px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;font-weight:500;transition:all .15s}
   .btn:hover{background:#f0f0eb}
   .btn-dark{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
   .btn-dark:hover{background:#333}
+  .btn-sm{padding:5px 12px;font-size:12px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer}
+  .btn-sm:hover{background:#f0f0eb}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
   .form-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:10px}
   label{font-size:12px;color:#666;display:block;margin-bottom:4px;font-weight:500}
   input,select{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;color:#1a1a1a}
   input:focus,select:focus{outline:none;border-color:#888}
-  .tag-status{padding:7px 0;font-size:13px;color:#888}
   .divider{border:none;border-top:1px solid #e5e5e0;margin:16px 0}
   .flex-row{display:flex;gap:8px;align-items:center}
   .toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
   .toast.show{opacity:1}
-  .empty-state{text-align:center;padding:40px;color:#aaa;font-size:13px}
+  .loading{text-align:center;padding:40px;color:#aaa;font-size:13px}
+  .spinner{display:inline-block;width:20px;height:20px;border:2px solid #ddd;border-top-color:#888;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .sync-info{font-size:12px;color:#aaa;font-weight:400}
   @media(max-width:600px){
     .form-grid,.form-grid-3{grid-template-columns:1fr}
     .metrics{grid-template-columns:1fr 1fr}
@@ -79,9 +82,12 @@
 <div class="topbar">
   <div>
     <div class="topbar-title">Inventario semanal — Outpost QA</div>
-    <div class="topbar-sub">Control de activos por colaborador</div>
+    <div class="topbar-sub" id="sync-status">Cargando datos de IT Glue...</div>
   </div>
-  <button class="btn btn-dark" onclick="showSection('nuevo')">+ Nuevo inventario</button>
+  <div class="flex-row">
+    <button class="btn btn-sm" onclick="recargarDatos()">↻ Sincronizar</button>
+    <button class="btn btn-dark" onclick="showSection('nuevo')">+ Nuevo inventario</button>
+  </div>
 </div>
 
 <div class="main">
@@ -95,47 +101,13 @@
   <!-- DASHBOARD -->
   <div id="sec-dashboard" class="section active">
     <div class="metrics">
-      <div class="metric"><div class="metric-label">Total activos</div><div class="metric-val" id="m-total">27</div></div>
-      <div class="metric"><div class="metric-label">Colaboradores</div><div class="metric-val" id="m-colab">6</div></div>
-      <div class="metric"><div class="metric-label">Último inventario</div><div class="metric-val" style="font-size:16px;padding-top:6px" id="m-fecha">07 may 2025</div></div>
-      <div class="metric"><div class="metric-label">Diferencias</div><div class="metric-val" style="color:#e24b4a" id="m-diff">3</div></div>
+      <div class="metric"><div class="metric-label">Total activos</div><div class="metric-val" id="m-total">—</div></div>
+      <div class="metric"><div class="metric-label">Colaboradores</div><div class="metric-val" id="m-colab">—</div></div>
+      <div class="metric"><div class="metric-label">Último inventario</div><div class="metric-val" style="font-size:16px;padding-top:6px" id="m-fecha">—</div></div>
+      <div class="metric"><div class="metric-label">Diferencias</div><div class="metric-val" id="m-diff">—</div></div>
     </div>
-
-    <div class="card">
-      <div class="card-title">Resumen — semana 19</div>
-      <table>
-        <thead><tr>
-          <th style="width:26%">Colaborador</th>
-          <th style="width:14%">Esperados</th>
-          <th style="width:14%">Escaneados</th>
-          <th style="width:22%">Estado</th>
-          <th>Diferencia</th>
-        </tr></thead>
-        <tbody>
-          <tr><td>Ana González</td><td>5</td><td>5</td><td><span class="badge badge-ok">✓ Completo</span></td><td>—</td></tr>
-          <tr class="row-warn"><td>Carlos Mendoza</td><td>4</td><td>5</td><td><span class="badge badge-warn">⚠ Tag extra</span></td><td>Tag 0000891 no registrado</td></tr>
-          <tr class="row-danger"><td>Laura Vega</td><td>6</td><td>5</td><td><span class="badge badge-danger">✗ Faltante</span></td><td>Monitor 0000312</td></tr>
-          <tr><td>Pedro Ruiz</td><td>4</td><td>4</td><td><span class="badge badge-ok">✓ Completo</span></td><td>—</td></tr>
-          <tr class="row-warn"><td>Sofía Torres</td><td>5</td><td>5</td><td><span class="badge badge-warn">⇄ Cambio</span></td><td>Laptop reasignada</td></tr>
-          <tr><td>Miguel Herrera</td><td>3</td><td>3</td><td><span class="badge badge-ok">✓ Completo</span></td><td>—</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Alertas activas</div>
-      <div class="alert-item alert-danger">
-        <div class="icon">🔴</div>
-        <div><div class="alert-title">Monitor faltante</div><div class="alert-sub">Laura Vega · tag esperado: <span class="tag">0000312</span></div></div>
-      </div>
-      <div class="alert-item alert-warn">
-        <div class="icon">🟡</div>
-        <div><div class="alert-title">Tag no registrado en el sistema</div><div class="alert-sub">Carlos Mendoza · tag escaneado: <span class="tag">0000891</span></div></div>
-      </div>
-      <div class="alert-item alert-warn">
-        <div class="icon">🟡</div>
-        <div><div class="alert-title">Cambio de dispositivo detectado</div><div class="alert-sub">Sofía Torres · laptop <span class="tag">0000415</span> → <span class="tag">0000502</span></div></div>
-      </div>
+    <div class="card" id="dashboard-content">
+      <div class="loading"><span class="spinner"></span>Conectando con IT Glue...</div>
     </div>
   </div>
 
@@ -150,8 +122,11 @@
   <!-- COLABORADORES -->
   <div id="sec-colaboradores" class="section">
     <div class="card">
-      <div class="card-title">Activos por colaborador</div>
-      <div id="colab-list"></div>
+      <div class="card-title">
+        Activos por colaborador
+        <span class="sync-info" id="colab-sync-info"></span>
+      </div>
+      <div id="colab-list"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
     </div>
   </div>
 
@@ -161,23 +136,17 @@
       <div class="card-title">Registrar nuevo inventario</div>
       <div class="form-grid">
         <div><label>Fecha del inventario</label><input type="date" id="inv-fecha"></div>
-        <div><label>Número de semana</label><input type="number" id="inv-semana" placeholder="ej. 20" min="1" max="52"></div>
+        <div><label>Número de semana</label><input type="number" id="inv-semana" min="1" max="52"></div>
       </div>
       <div style="margin-bottom:14px">
         <label>Colaborador</label>
         <select id="inv-colab" onchange="updateExpected()">
           <option value="">Seleccionar colaborador...</option>
-          <option>Ana González</option>
-          <option>Carlos Mendoza</option>
-          <option>Laura Vega</option>
-          <option>Pedro Ruiz</option>
-          <option>Sofía Torres</option>
-          <option>Miguel Herrera</option>
         </select>
       </div>
 
       <div id="expected-box" style="display:none;background:#f5f5f0;border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px">
-        <div style="font-weight:500;margin-bottom:8px;color:#555">Activos esperados para este colaborador:</div>
+        <div style="font-weight:500;margin-bottom:8px;color:#555">Activos esperados según IT Glue:</div>
         <div id="expected-list"></div>
       </div>
 
@@ -199,246 +168,162 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const COLABS = {
-  "Ana González": {
-    initials:"AG",
-    activos:[
-      {tag:"0000415",tipo:"Laptop",modelo:"MacBook Pro 14"},
-      {tag:"0000102",tipo:"Monitor",modelo:"Dell 27\""},
-      {tag:"0000233",tipo:"Headset",modelo:"Jabra Evolve"},
-      {tag:"0000501",tipo:"Yubikey",modelo:"YubiKey 5"},
-      {tag:"0000088",tipo:"Accesorio",modelo:"Magic Mouse"}
-    ]
-  },
-  "Carlos Mendoza": {
-    initials:"CM",
-    activos:[
-      {tag:"0000416",tipo:"Laptop",modelo:"MacBook Pro 14"},
-      {tag:"0000103",tipo:"Monitor",modelo:"LG 27\""},
-      {tag:"0000234",tipo:"Headset",modelo:"Jabra Evolve"},
-      {tag:"0000502",tipo:"Yubikey",modelo:"YubiKey 5"}
-    ]
-  },
-  "Laura Vega": {
-    initials:"LV",
-    activos:[
-      {tag:"0000417",tipo:"Laptop",modelo:"MacBook Air M2"},
-      {tag:"0000312",tipo:"Monitor",modelo:"Dell 27\""},
-      {tag:"0000313",tipo:"Monitor",modelo:"Dell 24\""},
-      {tag:"0000235",tipo:"Headset",modelo:"Jabra Evolve"},
-      {tag:"0000503",tipo:"Yubikey",modelo:"YubiKey 5"},
-      {tag:"0000089",tipo:"Accesorio",modelo:"Teclado Apple"}
-    ]
-  },
-  "Pedro Ruiz": {
-    initials:"PR",
-    activos:[
-      {tag:"0000418",tipo:"Laptop",modelo:"ThinkPad X1"},
-      {tag:"0000314",tipo:"Monitor",modelo:"LG 24\""},
-      {tag:"0000236",tipo:"Headset",modelo:"Poly Voyager"},
-      {tag:"0000504",tipo:"Yubikey",modelo:"YubiKey 5"}
-    ]
-  },
-  "Sofía Torres": {
-    initials:"ST",
-    activos:[
-      {tag:"0000419",tipo:"Laptop",modelo:"MacBook Pro 16"},
-      {tag:"0000315",tipo:"Monitor",modelo:"Dell 27\""},
-      {tag:"0000237",tipo:"Headset",modelo:"Jabra Evolve"},
-      {tag:"0000505",tipo:"Yubikey",modelo:"YubiKey 5"},
-      {tag:"0000090",tipo:"Accesorio",modelo:"Hub USB-C"}
-    ]
-  },
-  "Miguel Herrera": {
-    initials:"MH",
-    activos:[
-      {tag:"0000420",tipo:"Laptop",modelo:"MacBook Air M2"},
-      {tag:"0000316",tipo:"Monitor",modelo:"LG 24\""},
-      {tag:"0000238",tipo:"Headset",modelo:"Poly Voyager"}
-    ]
-  }
-};
+// =====================================================
+// CONFIGURACIÓN — solo cambia esta URL si regeneras el script
+// =====================================================
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaICA2Juk3IErUKEIWsAyWRMj955hg_1dIz6GhZ9jCYGpINSAXNoYxEQ0g9s3SN_EUIg/exec";
 
-let HISTORIAL = [
-  {semana:19,fecha:"07 may 2025",total:27,diffs:3,resumen:"Monitor faltante (Laura Vega), tag no registrado (Carlos Mendoza), cambio de laptop detectado (Sofía Torres)"},
-  {semana:18,fecha:"30 abr 2025",total:27,diffs:0,resumen:"Sin diferencias — todos los activos confirmados correctamente"},
-  {semana:17,fecha:"23 abr 2025",total:26,diffs:1,resumen:"Accesorio nuevo sin registrar detectado en Pedro Ruiz"},
-  {semana:16,fecha:"16 abr 2025",total:26,diffs:2,resumen:"Yubikey faltante (Sofía Torres), headset nuevo no registrado (Miguel Herrera)"},
-  {semana:15,fecha:"09 abr 2025",total:25,diffs:0,resumen:"Sin diferencias — todos los activos confirmados correctamente"},
-];
-
+// =====================================================
+// ESTADO GLOBAL
+// =====================================================
+let COLABS = {};
+let ACTIVOS_ITGLUE = [];
+let HISTORIAL = JSON.parse(localStorage.getItem('inventario_historial') || '[]');
 let tagCount = 0;
+let datosLoaded = false;
 
-function showSection(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');
-  const map={dashboard:0,historial:1,colaboradores:2,nuevo:3};
-  if(map[id]!==undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
-  if(id==='historial') renderHistorial();
-  if(id==='colaboradores') renderColabs();
-  if(id==='nuevo') initNuevo();
-}
+// =====================================================
+// CARGA DE DATOS DESDE IT GLUE
+// =====================================================
+async function cargarDatos() {
+  try {
+    document.getElementById('sync-status').textContent = 'Sincronizando con IT Glue...';
+    const res = await fetch(`${SCRIPT_URL}?action=configs`);
+    const data = await res.json();
 
-function initNuevo(){
-  tagCount=0;
-  document.getElementById('tags-container').innerHTML='';
-  document.getElementById('inv-colab').value='';
-  document.getElementById('expected-box').style.display='none';
-  document.getElementById('diff-preview').style.display='none';
-  const today=new Date();
-  document.getElementById('inv-fecha').valueAsDate=today;
-  const week=getWeekNumber(today);
-  document.getElementById('inv-semana').value=week;
-  addTagRow();
-}
+    if (data.error) throw new Error(data.error);
 
-function getWeekNumber(d){
-  d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
-  d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
-  const yearStart=new Date(Date.UTC(d.getUTCFullYear(),0,1));
-  return Math.ceil((((d-yearStart)/86400000)+1)/7);
-}
+    ACTIVOS_ITGLUE = data.activos || [];
+    COLABS = data.porColaborador || {};
 
-function updateExpected(){
-  const colab=document.getElementById('inv-colab').value;
-  const box=document.getElementById('expected-box');
-  const list=document.getElementById('expected-list');
-  if(!colab||!COLABS[colab]){box.style.display='none';return;}
-  box.style.display='block';
-  list.innerHTML=COLABS[colab].activos.map(a=>
-    `<div style="display:flex;gap:8px;align-items:center;padding:3px 0">
-      <span class="tag">${a.tag}</span>
-      <span style="color:#888">${a.tipo} — ${a.modelo}</span>
-    </div>`
-  ).join('');
-  refreshDiff();
-}
+    const totalColab = Object.keys(COLABS).filter(k => k !== 'Sin asignar').length;
+    document.getElementById('m-total').textContent = data.total || 0;
+    document.getElementById('m-colab').textContent = totalColab;
+    document.getElementById('sync-status').textContent = `Sincronizado con IT Glue · ${new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'})}`;
+    document.getElementById('colab-sync-info').textContent = `${data.total} activos · IT Glue`;
 
-function addTagRow(){
-  const c=document.getElementById('tags-container');
-  const idx=tagCount++;
-  const div=document.createElement('div');
-  div.className='form-grid-3';
-  div.id='tag-row-'+idx;
-  div.style.alignItems='end';
-  div.innerHTML=`
-    <div>
-      <label>Tipo de artículo</label>
-      <select onchange="refreshDiff()">
-        <option>Laptop</option><option>Monitor</option><option>Headset</option>
-        <option>Yubikey</option><option>Accesorio</option>
-      </select>
-    </div>
-    <div>
-      <label>Tag escaneado</label>
-      <input type="text" placeholder="0000000" oninput="checkTagInline(${idx});refreshDiff()" id="tag-val-${idx}" style="font-family:monospace">
-    </div>
-    <div>
-      <label>Estado</label>
-      <div id="tag-status-${idx}" class="tag-status">—</div>
-    </div>
-  `;
-  c.appendChild(div);
-}
+    populateColabSelect();
+    renderDashboard();
+    datosLoaded = true;
 
-function checkTagInline(idx){
-  const colab=document.getElementById('inv-colab').value;
-  const inp=document.getElementById('tag-val-'+idx);
-  const st=document.getElementById('tag-status-'+idx);
-  if(!inp||!st) return;
-  const tag=inp.value.trim();
-  if(!tag){st.innerHTML='—';return;}
-  if(!colab){st.innerHTML='<span class="badge badge-gray">Selecciona colaborador</span>';return;}
-  const data=COLABS[colab];
-  if(!data){st.innerHTML='—';return;}
-  const found=data.activos.find(a=>a.tag===tag);
-  if(found){
-    st.innerHTML=`<span class="badge badge-ok">✓ ${found.tipo}</span>`;
-  } else {
-    const other=Object.entries(COLABS).find(([n,d])=>n!==colab&&d.activos.find(a=>a.tag===tag));
-    if(other){
-      st.innerHTML=`<span class="badge badge-warn">⚠ Asignado a ${other[0]}</span>`;
-    } else {
-      st.innerHTML=`<span class="badge badge-danger">✗ No registrado</span>`;
-    }
+  } catch(err) {
+    document.getElementById('sync-status').textContent = 'Error al conectar con IT Glue';
+    document.getElementById('dashboard-content').innerHTML = `
+      <div class="alert-item alert-danger">
+        <div>
+          <div class="alert-title">No se pudo conectar con IT Glue</div>
+          <div class="alert-sub">${err.message}</div>
+          <button class="btn btn-sm" onclick="recargarDatos()" style="margin-top:8px">↻ Reintentar</button>
+        </div>
+      </div>`;
   }
 }
 
-function getScannedTags(){
-  const rows=document.querySelectorAll('#tags-container .form-grid-3');
-  const tags=[];
-  rows.forEach((row,i)=>{
-    const inp=document.getElementById('tag-val-'+i);
-    if(inp&&inp.value.trim()) tags.push(inp.value.trim());
-  });
-  return tags;
+function recargarDatos() {
+  document.getElementById('dashboard-content').innerHTML = '<div class="loading"><span class="spinner"></span>Reconectando...</div>';
+  document.getElementById('colab-list').innerHTML = '<div class="loading"><span class="spinner"></span>Cargando...</div>';
+  cargarDatos();
 }
 
-function refreshDiff(){
-  const colab=document.getElementById('inv-colab').value;
-  const box=document.getElementById('diff-preview');
-  if(!colab||!COLABS[colab]){box.style.display='none';return;}
-  const scanned=getScannedTags();
-  if(scanned.length===0){box.style.display='none';return;}
-  const expected=COLABS[colab].activos.map(a=>a.tag);
-  const missing=expected.filter(t=>!scanned.includes(t));
-  const extra=scanned.filter(t=>!expected.includes(t));
-  if(missing.length===0&&extra.length===0){
-    box.style.display='block';
-    box.innerHTML=`<div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px 14px;font-size:13px;color:#27500a;font-weight:500">✓ Sin diferencias — todos los activos coinciden</div>`;
+// =====================================================
+// DASHBOARD
+// =====================================================
+function renderDashboard() {
+  const ultimoInv = HISTORIAL.length > 0 ? HISTORIAL[0] : null;
+  document.getElementById('m-fecha').textContent = ultimoInv ? ultimoInv.fecha : 'Sin registros';
+  document.getElementById('m-diff').textContent = ultimoInv ? ultimoInv.diffs : '—';
+  if(ultimoInv) document.getElementById('m-diff').style.color = ultimoInv.diffs > 0 ? '#e24b4a' : '#27500a';
+
+  const nombresColab = Object.keys(COLABS).filter(k => k !== 'Sin asignar');
+  let tbody = '';
+  nombresColab.forEach(nombre => {
+    const activos = COLABS[nombre] || [];
+    tbody += `<tr>
+      <td>${nombre}</td>
+      <td>${activos.length}</td>
+      <td><span class="badge badge-info">IT Glue</span></td>
+      <td>${activos.map(a=>a.tipo).filter((v,i,arr)=>arr.indexOf(v)===i).join(', ')}</td>
+    </tr>`;
+  });
+
+  document.getElementById('dashboard-content').innerHTML = `
+    <div class="card-title">Activos registrados en IT Glue</div>
+    <table>
+      <thead><tr>
+        <th style="width:30%">Colaborador</th>
+        <th style="width:15%">Activos</th>
+        <th style="width:20%">Fuente</th>
+        <th>Tipos</th>
+      </tr></thead>
+      <tbody>${tbody}</tbody>
+    </table>`;
+}
+
+// =====================================================
+// COLABORADORES
+// =====================================================
+function renderColabs() {
+  const c = document.getElementById('colab-list');
+  const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar');
+  if(nombres.length === 0){
+    c.innerHTML = '<div class="loading">No hay datos cargados aún.</div>';
     return;
   }
-  let html=`<div style="background:#faeeda;border:1px solid #fac775;border-radius:8px;padding:12px 14px;font-size:13px"><div style="font-weight:500;color:#633806;margin-bottom:8px">Diferencias detectadas:</div>`;
-  missing.forEach(t=>{
-    const a=COLABS[colab].activos.find(x=>x.tag===t);
-    html+=`<div style="color:#791f1f;margin-bottom:4px">✗ Faltante: <span class="tag">${t}</span> — ${a?a.tipo+' '+a.modelo:''}</div>`;
-  });
-  extra.forEach(t=>{
-    html+=`<div style="color:#633806;margin-bottom:4px">+ Extra escaneado: <span class="tag">${t}</span></div>`;
-  });
-  html+='</div>';
-  box.style.display='block';
-  box.innerHTML=html;
+  c.innerHTML = nombres.map((nombre, i) => {
+    const activos = COLABS[nombre] || [];
+    const initials = nombre.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    return `
+      <div>
+        <div class="colab-header" onclick="toggleColab(${i})">
+          <div class="avatar">${initials}</div>
+          <div style="flex:1">
+            <div style="font-weight:500;font-size:13px">${nombre}</div>
+            <div style="font-size:12px;color:#888">${activos.length} activos en IT Glue</div>
+          </div>
+          <span style="font-size:12px;color:#aaa">▾ ver activos</span>
+        </div>
+        <div id="colab-assets-${i}" class="colab-assets">
+          <table style="margin-top:8px">
+            <thead><tr>
+              <th style="width:15%">ID</th>
+              <th style="width:30%">Nombre</th>
+              <th style="width:25%">Tipo</th>
+              <th>Estado</th>
+            </tr></thead>
+            <tbody>${activos.map(a=>`
+              <tr>
+                <td class="tag">${a.id}</td>
+                <td>${a.nombre}</td>
+                <td>${a.tipo}</td>
+                <td><span class="badge ${a.estado==='Active'?'badge-ok':'badge-gray'}">${a.estado||'—'}</span></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  }).join('');
 }
 
-function guardarInventario(){
-  const fecha=document.getElementById('inv-fecha').value;
-  const semana=parseInt(document.getElementById('inv-semana').value);
-  const colab=document.getElementById('inv-colab').value;
-  if(!fecha||!semana||!colab){showToast('Completa la fecha, semana y colaborador.');return;}
-  const scanned=getScannedTags();
-  if(scanned.length===0){showToast('Agrega al menos un tag escaneado.');return;}
-  const expected=COLABS[colab]?COLABS[colab].activos.map(a=>a.tag):[];
-  const missing=expected.filter(t=>!scanned.includes(t));
-  const extra=scanned.filter(t=>!expected.includes(t));
-  const diffs=missing.length+extra.length;
-  const fechaFmt=new Date(fecha+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
-  let resumen='';
-  if(diffs===0) resumen='Sin diferencias — inventario completo para '+colab;
-  else{
-    const parts=[];
-    if(missing.length) parts.push(missing.length+' faltante(s) en '+colab);
-    if(extra.length) parts.push(extra.length+' tag(s) extra en '+colab);
-    resumen=parts.join(', ');
+function toggleColab(i){
+  document.getElementById('colab-assets-'+i).classList.toggle('open');
+}
+
+// =====================================================
+// HISTORIAL
+// =====================================================
+function renderHistorial() {
+  const c = document.getElementById('hist-list');
+  if(HISTORIAL.length === 0){
+    c.innerHTML = '<div class="loading" style="color:#aaa">No hay inventarios registrados aún. Crea el primero con el botón "Nuevo inventario".</div>';
+    return;
   }
-  HISTORIAL.unshift({semana,fecha:fechaFmt,total:scanned.length,diffs,resumen});
-  document.getElementById('m-fecha').textContent=fechaFmt;
-  document.getElementById('m-diff').textContent=diffs;
-  showToast('Inventario semana '+semana+' guardado correctamente ✓');
-  setTimeout(()=>showSection('historial'),800);
-}
-
-function renderHistorial(){
-  const c=document.getElementById('hist-list');
-  if(HISTORIAL.length===0){c.innerHTML='<div class="empty-state">No hay inventarios registrados aún.</div>';return;}
-  c.innerHTML=HISTORIAL.map((h,i)=>`
-    <div class="hist-row" onclick="toggleHist(${i})" id="hist-row-${i}">
+  c.innerHTML = HISTORIAL.map((h,i) => `
+    <div class="hist-row" onclick="toggleHist(${i})">
       <div style="display:flex;align-items:center;gap:12px">
         <div class="week-badge">S${h.semana}</div>
         <div>
           <div style="font-weight:500;font-size:13px">${h.fecha}</div>
-          <div style="font-size:12px;color:#888">${h.total} activos revisados</div>
+          <div style="font-size:12px;color:#888">${h.colaborador} · ${h.escaneados} activos revisados</div>
         </div>
       </div>
       <span class="badge ${h.diffs===0?'badge-ok':'badge-warn'}">${h.diffs===0?'Sin diferencias':h.diffs+' diferencia'+(h.diffs!==1?'s':'')}</span>
@@ -453,40 +338,187 @@ function toggleHist(i){
   document.getElementById('hist-detail-'+i).classList.toggle('open');
 }
 
-function renderColabs(){
-  const c=document.getElementById('colab-list');
-  c.innerHTML=Object.entries(COLABS).map(([nombre,data],i)=>`
+// =====================================================
+// NUEVO INVENTARIO
+// =====================================================
+function populateColabSelect() {
+  const sel = document.getElementById('inv-colab');
+  const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar');
+  sel.innerHTML = '<option value="">Seleccionar colaborador...</option>' +
+    nombres.map(n => `<option>${n}</option>`).join('');
+}
+
+function initNuevo() {
+  tagCount = 0;
+  document.getElementById('tags-container').innerHTML = '';
+  document.getElementById('inv-colab').value = '';
+  document.getElementById('expected-box').style.display = 'none';
+  document.getElementById('diff-preview').style.display = 'none';
+  const today = new Date();
+  document.getElementById('inv-fecha').valueAsDate = today;
+  document.getElementById('inv-semana').value = getWeekNumber(today);
+  addTagRow();
+}
+
+function getWeekNumber(d) {
+  d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+  const y = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return Math.ceil((((d - y) / 86400000) + 1) / 7);
+}
+
+function updateExpected() {
+  const colab = document.getElementById('inv-colab').value;
+  const box = document.getElementById('expected-box');
+  const list = document.getElementById('expected-list');
+  if (!colab || !COLABS[colab]) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  list.innerHTML = COLABS[colab].map(a =>
+    `<div style="display:flex;gap:8px;align-items:center;padding:3px 0">
+      <span class="tag">${a.id}</span>
+      <span style="color:#888">${a.tipo} — ${a.nombre}</span>
+    </div>`
+  ).join('');
+  refreshDiff();
+}
+
+function addTagRow() {
+  const c = document.getElementById('tags-container');
+  const idx = tagCount++;
+  const div = document.createElement('div');
+  div.className = 'form-grid-3';
+  div.style.alignItems = 'end';
+  div.innerHTML = `
     <div>
-      <div class="colab-header" onclick="toggleColab(${i})">
-        <div class="avatar">${data.initials}</div>
-        <div style="flex:1">
-          <div style="font-weight:500;font-size:13px">${nombre}</div>
-          <div style="font-size:12px;color:#888">${data.activos.length} activos asignados</div>
-        </div>
-        <span style="font-size:12px;color:#aaa">▾ ver activos</span>
-      </div>
-      <div id="colab-assets-${i}" class="colab-assets">
-        <table style="margin-top:8px">
-          <thead><tr><th style="width:30%">Tag</th><th style="width:25%">Tipo</th><th>Modelo</th></tr></thead>
-          <tbody>${data.activos.map(a=>`<tr><td class="tag">${a.tag}</td><td>${a.tipo}</td><td>${a.modelo}</td></tr>`).join('')}</tbody>
-        </table>
-      </div>
+      <label>Tipo de artículo</label>
+      <select onchange="refreshDiff()">
+        <option>Laptop</option><option>Monitor</option><option>Headset</option>
+        <option>Yubikey</option><option>Accesorio</option>
+      </select>
     </div>
-  `).join('');
+    <div>
+      <label>ID / Tag escaneado</label>
+      <input type="text" placeholder="ID de IT Glue o tag" oninput="checkTagInline(${idx});refreshDiff()" id="tag-val-${idx}" style="font-family:monospace">
+    </div>
+    <div>
+      <label>Estado</label>
+      <div id="tag-status-${idx}" style="padding:7px 0;font-size:13px;color:#888">—</div>
+    </div>`;
+  c.appendChild(div);
 }
 
-function toggleColab(i){
-  document.getElementById('colab-assets-'+i).classList.toggle('open');
+function checkTagInline(idx) {
+  const colab = document.getElementById('inv-colab').value;
+  const inp = document.getElementById('tag-val-' + idx);
+  const st = document.getElementById('tag-status-' + idx);
+  if (!inp || !st) return;
+  const val = inp.value.trim();
+  if (!val) { st.innerHTML = '—'; return; }
+  if (!colab) { st.innerHTML = '<span class="badge badge-gray">Selecciona colaborador</span>'; return; }
+  const activos = COLABS[colab] || [];
+  const found = activos.find(a => a.id === val || a.nombre.toLowerCase().includes(val.toLowerCase()));
+  if (found) {
+    st.innerHTML = `<span class="badge badge-ok">✓ ${found.tipo}</span>`;
+  } else {
+    const other = Object.entries(COLABS).find(([n, arr]) => n !== colab && arr.find(a => a.id === val));
+    if (other) {
+      st.innerHTML = `<span class="badge badge-warn">⚠ Asignado a ${other[0]}</span>`;
+    } else {
+      st.innerHTML = `<span class="badge badge-danger">✗ No encontrado en IT Glue</span>`;
+    }
+  }
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
+function getScannedIds() {
+  const rows = document.querySelectorAll('#tags-container .form-grid-3');
+  const ids = [];
+  rows.forEach((row, i) => {
+    const inp = document.getElementById('tag-val-' + i);
+    if (inp && inp.value.trim()) ids.push(inp.value.trim());
+  });
+  return ids;
+}
+
+function refreshDiff() {
+  const colab = document.getElementById('inv-colab').value;
+  const box = document.getElementById('diff-preview');
+  if (!colab || !COLABS[colab]) { box.style.display = 'none'; return; }
+  const scanned = getScannedIds();
+  if (scanned.length === 0) { box.style.display = 'none'; return; }
+  const expected = COLABS[colab].map(a => a.id);
+  const missing = expected.filter(id => !scanned.includes(id));
+  const extra = scanned.filter(id => !expected.includes(id));
+  if (missing.length === 0 && extra.length === 0) {
+    box.style.display = 'block';
+    box.innerHTML = `<div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px 14px;font-size:13px;color:#27500a;font-weight:500">✓ Sin diferencias — todos los activos coinciden con IT Glue</div>`;
+    return;
+  }
+  let html = `<div style="background:#faeeda;border:1px solid #fac775;border-radius:8px;padding:12px 14px;font-size:13px"><div style="font-weight:500;color:#633806;margin-bottom:8px">Diferencias detectadas:</div>`;
+  missing.forEach(id => {
+    const a = COLABS[colab].find(x => x.id === id);
+    html += `<div style="color:#791f1f;margin-bottom:4px">✗ Faltante: <span class="tag">${id}</span>${a ? ' — ' + a.tipo + ' ' + a.nombre : ''}</div>`;
+  });
+  extra.forEach(id => {
+    html += `<div style="color:#633806;margin-bottom:4px">+ Escaneado no registrado: <span class="tag">${id}</span></div>`;
+  });
+  html += '</div>';
+  box.style.display = 'block';
+  box.innerHTML = html;
+}
+
+function guardarInventario() {
+  const fecha = document.getElementById('inv-fecha').value;
+  const semana = parseInt(document.getElementById('inv-semana').value);
+  const colab = document.getElementById('inv-colab').value;
+  if (!fecha || !semana || !colab) { showToast('Completa la fecha, semana y colaborador.'); return; }
+  const scanned = getScannedIds();
+  if (scanned.length === 0) { showToast('Agrega al menos un artículo escaneado.'); return; }
+  const expected = COLABS[colab] ? COLABS[colab].map(a => a.id) : [];
+  const missing = expected.filter(id => !scanned.includes(id));
+  const extra = scanned.filter(id => !expected.includes(id));
+  const diffs = missing.length + extra.length;
+  const fechaFmt = new Date(fecha + 'T12:00:00').toLocaleDateString('es-MX', {day:'2-digit',month:'short',year:'numeric'});
+  let resumen = '';
+  if (diffs === 0) resumen = 'Sin diferencias — inventario completo para ' + colab;
+  else {
+    const parts = [];
+    if (missing.length) parts.push(missing.length + ' activo(s) faltante(s)');
+    if (extra.length) parts.push(extra.length + ' activo(s) no registrado(s) en IT Glue');
+    resumen = parts.join(', ') + ' · ' + colab;
+  }
+  const entry = {semana, fecha: fechaFmt, colaborador: colab, escaneados: scanned.length, esperados: expected.length, diffs, resumen};
+  HISTORIAL.unshift(entry);
+  localStorage.setItem('inventario_historial', JSON.stringify(HISTORIAL));
+  document.getElementById('m-fecha').textContent = fechaFmt;
+  document.getElementById('m-diff').textContent = diffs;
+  document.getElementById('m-diff').style.color = diffs > 0 ? '#e24b4a' : '#27500a';
+  showToast('Inventario semana ' + semana + ' guardado ✓');
+  setTimeout(() => showSection('historial'), 800);
+}
+
+// =====================================================
+// NAVEGACIÓN Y UTILIDADES
+// =====================================================
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  const map = {dashboard:0, historial:1, colaboradores:2, nuevo:3};
+  if (map[id] !== undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  if (id === 'historial') renderHistorial();
+  if (id === 'colaboradores') renderColabs();
+  if (id === 'nuevo') initNuevo();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-initNuevo();
+// Arranca
+cargarDatos();
 </script>
 </body>
 </html>
