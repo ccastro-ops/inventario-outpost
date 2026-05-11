@@ -10,7 +10,7 @@
   .topbar{background:#fff;border-bottom:1px solid #e5e5e0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
   .topbar-title{font-size:16px;font-weight:500}
   .topbar-sub{font-size:12px;color:#888;margin-top:2px}
-  .main{max-width:1000px;margin:0 auto;padding:24px 16px}
+  .main{max-width:1100px;margin:0 auto;padding:24px 16px}
   .nav{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap}
   .nav-btn{padding:7px 14px;font-size:13px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;color:#555;transition:all .15s}
   .nav-btn.active{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
@@ -21,7 +21,7 @@
   .metric-label{font-size:11px;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
   .metric-val{font-size:24px;font-weight:500}
   .card{background:#fff;border-radius:12px;border:1px solid #e5e5e0;padding:16px 20px;margin-bottom:16px}
-  .card-title{font-size:14px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+  .card-title{font-size:14px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
   .badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
   .badge-ok{background:#eaf3de;color:#27500a}
   .badge-warn{background:#faeeda;color:#633806}
@@ -29,16 +29,16 @@
   .badge-info{background:#e6f1fb;color:#0c447c}
   .badge-gray{background:#f0f0eb;color:#444}
   table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}
-  th{text-align:left;font-size:11px;font-weight:500;color:#888;padding:7px 10px;border-bottom:1px solid #e5e5e0;text-transform:uppercase;letter-spacing:.4px}
+  th{text-align:left;font-size:11px;font-weight:500;color:#888;padding:7px 10px;border-bottom:1px solid #e5e5e0;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;user-select:none}
+  th:hover{color:#444}
   td{padding:8px 10px;border-bottom:1px solid #f0f0eb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   tr:last-child td{border-bottom:none}
   tr.row-danger td{background:#fcebeb44}
   tr.row-warn td{background:#faeeda44}
-  .tag{font-family:monospace;font-size:12px;color:#555;background:#f5f5f0;padding:2px 6px;border-radius:4px}
+  .tag{font-family:monospace;font-size:12px;color:#555;background:#f5f5f0;padding:2px 6px;border-radius:4px;white-space:nowrap}
   .alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:8px;margin-bottom:8px;font-size:13px}
   .alert-danger{background:#fcebeb;border:1px solid #f09595}
   .alert-warn{background:#faeeda;border:1px solid #fac775}
-  .alert-ok{background:#eaf3de;border:1px solid #c0dd97}
   .alert-title{font-weight:500;margin-bottom:2px}
   .alert-sub{font-size:12px;color:#666}
   .hist-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid #f0f0eb;cursor:pointer;border-radius:6px;transition:background .1s}
@@ -47,7 +47,8 @@
   .hist-detail{display:none;font-size:13px;color:#666;padding:8px 0 12px}
   .hist-detail.open{display:block}
   .week-badge{background:#f0f0eb;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:500;color:#555;min-width:40px;text-align:center}
-  .colab-header{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0eb;cursor:pointer}
+  .colab-header{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0eb;cursor:pointer;transition:background .1s}
+  .colab-header:hover{background:#f5f5f0;margin:0 -8px;padding:10px 8px}
   .colab-assets{display:none;padding-bottom:12px}
   .colab-assets.open{display:block}
   .avatar{width:34px;height:34px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#0c447c;flex-shrink:0}
@@ -62,14 +63,20 @@
   label{font-size:12px;color:#666;display:block;margin-bottom:4px;font-weight:500}
   input,select{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:7px;font-size:13px;font-family:inherit;background:#fff;color:#1a1a1a}
   input:focus,select:focus{outline:none;border-color:#888}
+  .search-box{padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;width:100%;margin-bottom:12px;font-family:inherit}
+  .search-box:focus{outline:none;border-color:#888}
   .divider{border:none;border-top:1px solid #e5e5e0;margin:16px 0}
-  .flex-row{display:flex;gap:8px;align-items:center}
+  .flex-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .toast{position:fixed;bottom:24px;right:24px;background:#1a1a1a;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100}
   .toast.show{opacity:1}
   .loading{text-align:center;padding:40px;color:#aaa;font-size:13px}
   .spinner{display:inline-block;width:20px;height:20px;border:2px solid #ddd;border-top-color:#888;border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .sync-info{font-size:12px;color:#aaa;font-weight:400}
+  .diff-ok{background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px 14px;font-size:13px;color:#27500a;font-weight:500}
+  .diff-warn{background:#faeeda;border:1px solid #fac775;border-radius:8px;padding:12px 14px;font-size:13px}
+  .diff-title{font-weight:500;color:#633806;margin-bottom:8px}
+  .diff-line{margin-bottom:4px}
+  .inv-detail{background:#f5f5f0;border-radius:8px;padding:12px;margin-top:8px}
   @media(max-width:600px){
     .form-grid,.form-grid-3{grid-template-columns:1fr}
     .metrics{grid-template-columns:1fr 1fr}
@@ -103,11 +110,15 @@
     <div class="metrics">
       <div class="metric"><div class="metric-label">Total activos</div><div class="metric-val" id="m-total">—</div></div>
       <div class="metric"><div class="metric-label">Colaboradores</div><div class="metric-val" id="m-colab">—</div></div>
-      <div class="metric"><div class="metric-label">Último inventario</div><div class="metric-val" style="font-size:16px;padding-top:6px" id="m-fecha">—</div></div>
-      <div class="metric"><div class="metric-label">Diferencias</div><div class="metric-val" id="m-diff">—</div></div>
+      <div class="metric"><div class="metric-label">Último inventario</div><div class="metric-val" style="font-size:15px;padding-top:4px" id="m-fecha">—</div></div>
+      <div class="metric"><div class="metric-label">Diferencias</div><div class="metric-val" id="m-diff" style="color:#27500a">—</div></div>
     </div>
     <div class="card" id="dashboard-content">
       <div class="loading"><span class="spinner"></span>Conectando con IT Glue...</div>
+    </div>
+    <div class="card" id="alertas-card" style="display:none">
+      <div class="card-title">Alertas del último inventario</div>
+      <div id="alertas-content"></div>
     </div>
   </div>
 
@@ -124,8 +135,9 @@
     <div class="card">
       <div class="card-title">
         Activos por colaborador
-        <span class="sync-info" id="colab-sync-info"></span>
+        <span style="font-size:12px;color:#aaa;font-weight:400" id="colab-sync-info"></span>
       </div>
+      <input type="text" class="search-box" placeholder="🔍 Buscar colaborador..." oninput="filtrarColabs(this.value)" id="colab-search">
       <div id="colab-list"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
     </div>
   </div>
@@ -144,18 +156,14 @@
           <option value="">Seleccionar colaborador...</option>
         </select>
       </div>
-
-      <div id="expected-box" style="display:none;background:#f5f5f0;border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px">
-        <div style="font-weight:500;margin-bottom:8px;color:#555">Activos esperados según IT Glue:</div>
+      <div id="expected-box" style="display:none;background:#f5f5f0;border-radius:8px;padding:12px;margin-bottom:14px">
+        <div style="font-weight:500;font-size:12px;margin-bottom:8px;color:#555;text-transform:uppercase;letter-spacing:.4px">Activos esperados según IT Glue</div>
         <div id="expected-list"></div>
       </div>
-
       <div style="font-weight:500;font-size:12px;color:#666;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Tags escaneados en físico</div>
       <div id="tags-container"></div>
       <button class="btn" onclick="addTagRow()" style="margin-bottom:16px;margin-top:4px">+ Agregar artículo</button>
-
       <div id="diff-preview" style="display:none;margin-bottom:16px"></div>
-
       <hr class="divider">
       <div class="flex-row">
         <button class="btn btn-dark" onclick="guardarInventario()">💾 Guardar inventario</button>
@@ -168,44 +176,32 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// =====================================================
-// CONFIGURACIÓN — solo cambia esta URL si regeneras el script
-// =====================================================
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaICA2Juk3IErUKEIWsAyWRMj955hg_1dIz6GhZ9jCYGpINSAXNoYxEQ0g9s3SN_EUIg/exec";
 
-// =====================================================
-// ESTADO GLOBAL
-// =====================================================
 let COLABS = {};
 let ACTIVOS_ITGLUE = [];
-let HISTORIAL = JSON.parse(localStorage.getItem('inventario_historial') || '[]');
+let HISTORIAL = JSON.parse(localStorage.getItem('oq_historial') || '[]');
 let tagCount = 0;
-let datosLoaded = false;
 
-// =====================================================
-// CARGA DE DATOS DESDE IT GLUE
-// =====================================================
 async function cargarDatos() {
   try {
     document.getElementById('sync-status').textContent = 'Sincronizando con IT Glue...';
     const res = await fetch(`${SCRIPT_URL}?action=configs`);
     const data = await res.json();
-
     if (data.error) throw new Error(data.error);
 
     ACTIVOS_ITGLUE = data.activos || [];
     COLABS = data.porColaborador || {};
 
     const totalColab = Object.keys(COLABS).filter(k => k !== 'Sin asignar').length;
-    document.getElementById('m-total').textContent = data.total || 0;
+    document.getElementById('m-total').textContent = data.total.toLocaleString();
     document.getElementById('m-colab').textContent = totalColab;
-    document.getElementById('sync-status').textContent = `Sincronizado con IT Glue · ${new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'})}`;
-    document.getElementById('colab-sync-info').textContent = `${data.total} activos · IT Glue`;
+    document.getElementById('sync-status').textContent = `Sincronizado · ${new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})} · ${data.total.toLocaleString()} activos`;
+    document.getElementById('colab-sync-info').textContent = `${data.total.toLocaleString()} activos · ${totalColab} colaboradores`;
 
     populateColabSelect();
     renderDashboard();
-    datosLoaded = true;
-
+    if(document.getElementById('sec-colaboradores').classList.contains('active')) renderColabs();
   } catch(err) {
     document.getElementById('sync-status').textContent = 'Error al conectar con IT Glue';
     document.getElementById('dashboard-content').innerHTML = `
@@ -225,77 +221,113 @@ function recargarDatos() {
   cargarDatos();
 }
 
-// =====================================================
-// DASHBOARD
-// =====================================================
 function renderDashboard() {
   const ultimoInv = HISTORIAL.length > 0 ? HISTORIAL[0] : null;
-  document.getElementById('m-fecha').textContent = ultimoInv ? ultimoInv.fecha : 'Sin registros';
-  document.getElementById('m-diff').textContent = ultimoInv ? ultimoInv.diffs : '—';
-  if(ultimoInv) document.getElementById('m-diff').style.color = ultimoInv.diffs > 0 ? '#e24b4a' : '#27500a';
-
-  const nombresColab = Object.keys(COLABS).filter(k => k !== 'Sin asignar');
-  let tbody = '';
-  nombresColab.forEach(nombre => {
+  if(ultimoInv) {
+    document.getElementById('m-fecha').textContent = ultimoInv.fecha;
+    document.getElementById('m-diff').textContent = ultimoInv.diffs;
+    document.getElementById('m-diff').style.color = ultimoInv.diffs > 0 ? '#e24b4a' : '#27500a';
+    renderAlertas(ultimoInv);
+  } else {
+    document.getElementById('m-fecha').textContent = 'Sin registros';
+    document.getElementById('m-diff').textContent = '—';
+  }
+  const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar').sort();
+  const tbody = nombres.map(nombre => {
     const activos = COLABS[nombre] || [];
-    tbody += `<tr>
-      <td>${nombre}</td>
-      <td>${activos.length}</td>
+    const tipos = [...new Set(activos.map(a => a.modelo))].slice(0,3).join(', ');
+    return `<tr>
+      <td title="${nombre}">${nombre}</td>
+      <td style="text-align:center">${activos.length}</td>
+      <td>${tipos}</td>
       <td><span class="badge badge-info">IT Glue</span></td>
-      <td>${activos.map(a=>a.tipo).filter((v,i,arr)=>arr.indexOf(v)===i).join(', ')}</td>
     </tr>`;
-  });
-
+  }).join('');
   document.getElementById('dashboard-content').innerHTML = `
-    <div class="card-title">Activos registrados en IT Glue</div>
-    <table>
+    <div class="card-title">
+      Activos registrados en IT Glue
+      <input type="text" class="search-box" style="width:220px;margin:0" placeholder="🔍 Buscar colaborador..." oninput="filtrarDashboard(this.value)">
+    </div>
+    <table id="dashboard-table">
       <thead><tr>
-        <th style="width:30%">Colaborador</th>
-        <th style="width:15%">Activos</th>
-        <th style="width:20%">Fuente</th>
-        <th>Tipos</th>
+        <th style="width:35%" onclick="sortDashboard('nombre')">Colaborador ↕</th>
+        <th style="width:12%;text-align:center" onclick="sortDashboard('activos')">Activos ↕</th>
+        <th>Tipos de dispositivo</th>
+        <th style="width:15%">Fuente</th>
       </tr></thead>
-      <tbody>${tbody}</tbody>
+      <tbody id="dashboard-tbody">${tbody}</tbody>
     </table>`;
 }
 
-// =====================================================
-// COLABORADORES
-// =====================================================
-function renderColabs() {
-  const c = document.getElementById('colab-list');
+function filtrarDashboard(q) {
+  document.querySelectorAll('#dashboard-tbody tr').forEach(r => {
+    r.style.display = r.cells[0].textContent.toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+
+function sortDashboard(campo) {
   const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar');
-  if(nombres.length === 0){
-    c.innerHTML = '<div class="loading">No hay datos cargados aún.</div>';
+  if(campo === 'nombre') nombres.sort();
+  else nombres.sort((a,b) => (COLABS[b]||[]).length - (COLABS[a]||[]).length);
+  document.getElementById('dashboard-tbody').innerHTML = nombres.map(nombre => {
+    const activos = COLABS[nombre] || [];
+    const tipos = [...new Set(activos.map(a => a.modelo))].slice(0,3).join(', ');
+    return `<tr><td title="${nombre}">${nombre}</td><td style="text-align:center">${activos.length}</td><td>${tipos}</td><td><span class="badge badge-info">IT Glue</span></td></tr>`;
+  }).join('');
+}
+
+function renderAlertas(inv) {
+  if(!inv || !inv.detalle) return;
+  const alertas = inv.detalle.filter(d => d.tipo_resultado !== 'ok');
+  const card = document.getElementById('alertas-card');
+  const content = document.getElementById('alertas-content');
+  if(alertas.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  content.innerHTML = alertas.map(a => `
+    <div class="alert-item ${a.tipo_resultado === 'faltante' ? 'alert-danger' : 'alert-warn'}">
+      <div>
+        <div class="alert-title">${a.tipo_resultado === 'faltante' ? '✗ Faltante' : '+ Tag extra'}</div>
+        <div class="alert-sub"><span class="tag">${a.assetTag}</span> ${a.nombre} · ${inv.colaborador}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderColabs(filtro) {
+  const c = document.getElementById('colab-list');
+  let nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar').sort();
+  if(filtro) nombres = nombres.filter(n => n.toLowerCase().includes(filtro.toLowerCase()));
+  if(nombres.length === 0) {
+    c.innerHTML = `<div class="loading" style="color:#aaa">${filtro ? 'No se encontraron colaboradores.' : 'No hay datos.'}</div>`;
     return;
   }
   c.innerHTML = nombres.map((nombre, i) => {
     const activos = COLABS[nombre] || [];
-    const initials = nombre.split(' ').map(n=>n[0]).slice(0,2).join('').toUpperCase();
+    const initials = nombre.split(' ').map(n=>n[0]).filter(Boolean).slice(0,2).join('').toUpperCase();
+    const tipos = [...new Set(activos.map(a => a.modelo))];
     return `
       <div>
-        <div class="colab-header" onclick="toggleColab(${i})">
+        <div class="colab-header" onclick="toggleColab('ca-${i}')">
           <div class="avatar">${initials}</div>
-          <div style="flex:1">
-            <div style="font-weight:500;font-size:13px">${nombre}</div>
-            <div style="font-size:12px;color:#888">${activos.length} activos en IT Glue</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:500;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nombre}</div>
+            <div style="font-size:12px;color:#888">${activos.length} activos · ${tipos.slice(0,3).join(', ')}</div>
           </div>
-          <span style="font-size:12px;color:#aaa">▾ ver activos</span>
+          <span style="font-size:11px;color:#bbb;flex-shrink:0">▾</span>
         </div>
-        <div id="colab-assets-${i}" class="colab-assets">
+        <div id="ca-${i}" class="colab-assets">
           <table style="margin-top:8px">
             <thead><tr>
-              <th style="width:15%">ID</th>
-              <th style="width:30%">Nombre</th>
-              <th style="width:25%">Tipo</th>
+              <th style="width:18%">Asset Tag</th>
+              <th style="width:38%">Nombre</th>
+              <th style="width:22%">Tipo</th>
               <th>Estado</th>
             </tr></thead>
-            <tbody>${activos.map(a=>`
-              <tr>
-                <td class="tag">${a.id}</td>
-                <td>${a.nombre}</td>
-                <td>${a.tipo}</td>
-                <td><span class="badge ${a.estado==='Active'?'badge-ok':'badge-gray'}">${a.estado||'—'}</span></td>
+            <tbody>
+              ${activos.map(a=>`<tr>
+                <td><span class="tag">${a.assetTag||'—'}</span></td>
+                <td title="${a.nombre}">${a.nombre}</td>
+                <td>${a.modelo}</td>
+                <td><span class="badge ${a.estado==='In use'?'badge-ok':a.estado==='Storaged'?'badge-gray':'badge-warn'}">${a.estado||'—'}</span></td>
               </tr>`).join('')}
             </tbody>
           </table>
@@ -304,17 +336,13 @@ function renderColabs() {
   }).join('');
 }
 
-function toggleColab(i){
-  document.getElementById('colab-assets-'+i).classList.toggle('open');
-}
+function filtrarColabs(q) { renderColabs(q); }
+function toggleColab(id) { const el=document.getElementById(id); if(el) el.classList.toggle('open'); }
 
-// =====================================================
-// HISTORIAL
-// =====================================================
 function renderHistorial() {
   const c = document.getElementById('hist-list');
-  if(HISTORIAL.length === 0){
-    c.innerHTML = '<div class="loading" style="color:#aaa">No hay inventarios registrados aún. Crea el primero con el botón "Nuevo inventario".</div>';
+  if(HISTORIAL.length === 0) {
+    c.innerHTML = '<div class="loading" style="color:#aaa;padding:24px">No hay inventarios registrados aún.</div>';
     return;
   }
   c.innerHTML = HISTORIAL.map((h,i) => `
@@ -323,29 +351,42 @@ function renderHistorial() {
         <div class="week-badge">S${h.semana}</div>
         <div>
           <div style="font-weight:500;font-size:13px">${h.fecha}</div>
-          <div style="font-size:12px;color:#888">${h.colaborador} · ${h.escaneados} activos revisados</div>
+          <div style="font-size:12px;color:#888">${h.colaborador} · ${h.escaneados} escaneados / ${h.esperados} esperados</div>
         </div>
       </div>
-      <span class="badge ${h.diffs===0?'badge-ok':'badge-warn'}">${h.diffs===0?'Sin diferencias':h.diffs+' diferencia'+(h.diffs!==1?'s':'')}</span>
+      <span class="badge ${h.diffs===0?'badge-ok':'badge-warn'}">${h.diffs===0?'✓ Sin diferencias':h.diffs+' diferencia'+(h.diffs!==1?'s':'')}</span>
     </div>
-    <div id="hist-detail-${i}" class="hist-detail">
-      <div style="padding:4px 0 0 52px;color:#666">${h.resumen}</div>
-    </div>
-  `).join('');
+    <div id="hd-${i}" class="hist-detail">
+      <div style="padding:6px 0 0 52px">
+        <div style="color:#666;margin-bottom:6px">${h.resumen}</div>
+        ${h.detalle && h.detalle.length > 0 ? `
+        <div class="inv-detail">
+          <table style="font-size:12px">
+            <thead><tr>
+              <th style="width:18%">Asset Tag</th>
+              <th style="width:38%">Nombre</th>
+              <th style="width:20%">Tipo</th>
+              <th>Resultado</th>
+            </tr></thead>
+            <tbody>${h.detalle.map(d=>`<tr>
+              <td><span class="tag">${d.assetTag||'—'}</span></td>
+              <td>${d.nombre||'—'}</td>
+              <td>${d.tipo||'—'}</td>
+              <td><span class="badge ${d.tipo_resultado==='ok'?'badge-ok':d.tipo_resultado==='faltante'?'badge-danger':'badge-warn'}">${d.tipo_resultado==='ok'?'✓ OK':d.tipo_resultado==='faltante'?'✗ Faltante':'+ Extra'}</span></td>
+            </tr>`).join('')}</tbody>
+          </table>
+        </div>` : ''}
+      </div>
+    </div>`).join('');
 }
 
-function toggleHist(i){
-  document.getElementById('hist-detail-'+i).classList.toggle('open');
-}
+function toggleHist(i) { document.getElementById('hd-'+i).classList.toggle('open'); }
 
-// =====================================================
-// NUEVO INVENTARIO
-// =====================================================
 function populateColabSelect() {
   const sel = document.getElementById('inv-colab');
-  const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar');
+  const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar').sort();
   sel.innerHTML = '<option value="">Seleccionar colaborador...</option>' +
-    nombres.map(n => `<option>${n}</option>`).join('');
+    nombres.map(n => `<option value="${n}">${n}</option>`).join('');
 }
 
 function initNuevo() {
@@ -363,22 +404,27 @@ function initNuevo() {
 function getWeekNumber(d) {
   d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-  const y = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  return Math.ceil((((d - y) / 86400000) + 1) / 7);
+  return Math.ceil((((d - new Date(Date.UTC(d.getUTCFullYear(),0,1))) / 86400000) + 1) / 7);
 }
 
 function updateExpected() {
   const colab = document.getElementById('inv-colab').value;
   const box = document.getElementById('expected-box');
-  const list = document.getElementById('expected-list');
   if (!colab || !COLABS[colab]) { box.style.display = 'none'; return; }
   box.style.display = 'block';
-  list.innerHTML = COLABS[colab].map(a =>
-    `<div style="display:flex;gap:8px;align-items:center;padding:3px 0">
-      <span class="tag">${a.id}</span>
-      <span style="color:#888">${a.tipo} — ${a.nombre}</span>
-    </div>`
-  ).join('');
+  document.getElementById('expected-list').innerHTML = `
+    <table style="font-size:12px;margin-top:4px">
+      <thead><tr>
+        <th style="width:20%">Asset Tag</th>
+        <th style="width:45%">Nombre</th>
+        <th>Tipo</th>
+      </tr></thead>
+      <tbody>${COLABS[colab].map(a=>`<tr>
+        <td><span class="tag">${a.assetTag||'—'}</span></td>
+        <td>${a.nombre}</td>
+        <td>${a.modelo}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
   refreshDiff();
 }
 
@@ -390,15 +436,15 @@ function addTagRow() {
   div.style.alignItems = 'end';
   div.innerHTML = `
     <div>
-      <label>Tipo de artículo</label>
+      <label>Tipo</label>
       <select onchange="refreshDiff()">
         <option>Laptop</option><option>Monitor</option><option>Headset</option>
-        <option>Yubikey</option><option>Accesorio</option>
+        <option>Yubikey</option><option>Smartphone</option><option>Accesorio</option>
       </select>
     </div>
     <div>
-      <label>ID / Tag escaneado</label>
-      <input type="text" placeholder="ID de IT Glue o tag" oninput="checkTagInline(${idx});refreshDiff()" id="tag-val-${idx}" style="font-family:monospace">
+      <label>Asset Tag escaneado</label>
+      <input type="text" placeholder="ej. 0001188" oninput="checkTagInline(${idx});refreshDiff()" id="tag-val-${idx}" style="font-family:monospace;letter-spacing:1px">
     </div>
     <div>
       <label>Estado</label>
@@ -409,115 +455,113 @@ function addTagRow() {
 
 function checkTagInline(idx) {
   const colab = document.getElementById('inv-colab').value;
-  const inp = document.getElementById('tag-val-' + idx);
-  const st = document.getElementById('tag-status-' + idx);
-  if (!inp || !st) return;
+  const inp = document.getElementById('tag-val-'+idx);
+  const st = document.getElementById('tag-status-'+idx);
+  if(!inp||!st) return;
   const val = inp.value.trim();
-  if (!val) { st.innerHTML = '—'; return; }
-  if (!colab) { st.innerHTML = '<span class="badge badge-gray">Selecciona colaborador</span>'; return; }
-  const activos = COLABS[colab] || [];
-  const found = activos.find(a => a.id === val || a.nombre.toLowerCase().includes(val.toLowerCase()));
-  if (found) {
-    st.innerHTML = `<span class="badge badge-ok">✓ ${found.tipo}</span>`;
+  if(!val){st.innerHTML='—';return;}
+  if(!colab){st.innerHTML='<span class="badge badge-gray">Selecciona colaborador</span>';return;}
+  const activos = COLABS[colab]||[];
+  const found = activos.find(a=>a.assetTag===val);
+  if(found){
+    st.innerHTML=`<span class="badge badge-ok">✓ ${found.nombre}</span>`;
   } else {
-    const other = Object.entries(COLABS).find(([n, arr]) => n !== colab && arr.find(a => a.id === val));
-    if (other) {
-      st.innerHTML = `<span class="badge badge-warn">⚠ Asignado a ${other[0]}</span>`;
-    } else {
-      st.innerHTML = `<span class="badge badge-danger">✗ No encontrado en IT Glue</span>`;
-    }
+    const other = Object.entries(COLABS).find(([n,arr])=>n!==colab&&arr.find(a=>a.assetTag===val));
+    if(other) st.innerHTML=`<span class="badge badge-warn">⚠ Asignado a ${other[0]}</span>`;
+    else st.innerHTML=`<span class="badge badge-danger">✗ No encontrado en IT Glue</span>`;
   }
 }
 
-function getScannedIds() {
-  const rows = document.querySelectorAll('#tags-container .form-grid-3');
-  const ids = [];
-  rows.forEach((row, i) => {
-    const inp = document.getElementById('tag-val-' + i);
-    if (inp && inp.value.trim()) ids.push(inp.value.trim());
+function getScannedTags() {
+  const tags=[];
+  document.querySelectorAll('#tags-container .form-grid-3').forEach((row,i)=>{
+    const inp=document.getElementById('tag-val-'+i);
+    const sel=row.querySelector('select');
+    if(inp&&inp.value.trim()) tags.push({assetTag:inp.value.trim(),tipo:sel?sel.value:''});
   });
-  return ids;
+  return tags;
 }
 
 function refreshDiff() {
-  const colab = document.getElementById('inv-colab').value;
-  const box = document.getElementById('diff-preview');
-  if (!colab || !COLABS[colab]) { box.style.display = 'none'; return; }
-  const scanned = getScannedIds();
-  if (scanned.length === 0) { box.style.display = 'none'; return; }
-  const expected = COLABS[colab].map(a => a.id);
-  const missing = expected.filter(id => !scanned.includes(id));
-  const extra = scanned.filter(id => !expected.includes(id));
-  if (missing.length === 0 && extra.length === 0) {
-    box.style.display = 'block';
-    box.innerHTML = `<div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px 14px;font-size:13px;color:#27500a;font-weight:500">✓ Sin diferencias — todos los activos coinciden con IT Glue</div>`;
+  const colab=document.getElementById('inv-colab').value;
+  const box=document.getElementById('diff-preview');
+  if(!colab||!COLABS[colab]){box.style.display='none';return;}
+  const scanned=getScannedTags().map(t=>t.assetTag);
+  if(scanned.length===0){box.style.display='none';return;}
+  const expected=COLABS[colab].map(a=>a.assetTag);
+  const missing=expected.filter(t=>!scanned.includes(t));
+  const extra=scanned.filter(t=>!expected.includes(t));
+  box.style.display='block';
+  if(missing.length===0&&extra.length===0){
+    box.innerHTML=`<div class="diff-ok">✓ Sin diferencias — todos los activos coinciden con IT Glue</div>`;
     return;
   }
-  let html = `<div style="background:#faeeda;border:1px solid #fac775;border-radius:8px;padding:12px 14px;font-size:13px"><div style="font-weight:500;color:#633806;margin-bottom:8px">Diferencias detectadas:</div>`;
-  missing.forEach(id => {
-    const a = COLABS[colab].find(x => x.id === id);
-    html += `<div style="color:#791f1f;margin-bottom:4px">✗ Faltante: <span class="tag">${id}</span>${a ? ' — ' + a.tipo + ' ' + a.nombre : ''}</div>`;
+  let html=`<div class="diff-warn"><div class="diff-title">Diferencias detectadas:</div>`;
+  missing.forEach(t=>{
+    const a=COLABS[colab].find(x=>x.assetTag===t);
+    html+=`<div class="diff-line" style="color:#791f1f">✗ Faltante: <span class="tag">${t}</span>${a?' — '+a.nombre+' ('+a.modelo+')':''}</div>`;
   });
-  extra.forEach(id => {
-    html += `<div style="color:#633806;margin-bottom:4px">+ Escaneado no registrado: <span class="tag">${id}</span></div>`;
+  extra.forEach(t=>{
+    const other=Object.entries(COLABS).find(([n,arr])=>n!==colab&&arr.find(a=>a.assetTag===t));
+    html+=`<div class="diff-line" style="color:#633806">+ Extra: <span class="tag">${t}</span>${other?' — registrado a '+other[0]:' — no encontrado en IT Glue'}</div>`;
   });
-  html += '</div>';
-  box.style.display = 'block';
-  box.innerHTML = html;
+  html+='</div>';
+  box.innerHTML=html;
 }
 
 function guardarInventario() {
-  const fecha = document.getElementById('inv-fecha').value;
-  const semana = parseInt(document.getElementById('inv-semana').value);
-  const colab = document.getElementById('inv-colab').value;
-  if (!fecha || !semana || !colab) { showToast('Completa la fecha, semana y colaborador.'); return; }
-  const scanned = getScannedIds();
-  if (scanned.length === 0) { showToast('Agrega al menos un artículo escaneado.'); return; }
-  const expected = COLABS[colab] ? COLABS[colab].map(a => a.id) : [];
-  const missing = expected.filter(id => !scanned.includes(id));
-  const extra = scanned.filter(id => !expected.includes(id));
-  const diffs = missing.length + extra.length;
-  const fechaFmt = new Date(fecha + 'T12:00:00').toLocaleDateString('es-MX', {day:'2-digit',month:'short',year:'numeric'});
-  let resumen = '';
-  if (diffs === 0) resumen = 'Sin diferencias — inventario completo para ' + colab;
-  else {
-    const parts = [];
-    if (missing.length) parts.push(missing.length + ' activo(s) faltante(s)');
-    if (extra.length) parts.push(extra.length + ' activo(s) no registrado(s) en IT Glue');
-    resumen = parts.join(', ') + ' · ' + colab;
-  }
-  const entry = {semana, fecha: fechaFmt, colaborador: colab, escaneados: scanned.length, esperados: expected.length, diffs, resumen};
+  const fecha=document.getElementById('inv-fecha').value;
+  const semana=parseInt(document.getElementById('inv-semana').value);
+  const colab=document.getElementById('inv-colab').value;
+  if(!fecha||!semana||!colab){showToast('Completa la fecha, semana y colaborador.');return;}
+  const scannedObjs=getScannedTags();
+  if(scannedObjs.length===0){showToast('Agrega al menos un artículo escaneado.');return;}
+  const scanned=scannedObjs.map(t=>t.assetTag);
+  const esperados=COLABS[colab]||[];
+  const expectedTags=esperados.map(a=>a.assetTag);
+  const missing=expectedTags.filter(t=>!scanned.includes(t));
+  const extra=scanned.filter(t=>!expectedTags.includes(t));
+  const diffs=missing.length+extra.length;
+  const fechaFmt=new Date(fecha+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  const detalle=[];
+  scanned.forEach(t=>{
+    const a=esperados.find(x=>x.assetTag===t);
+    detalle.push({assetTag:t,nombre:a?a.nombre:'—',tipo:a?a.modelo:'—',tipo_resultado:a?'ok':'extra'});
+  });
+  missing.forEach(t=>{
+    const a=esperados.find(x=>x.assetTag===t);
+    detalle.push({assetTag:t,nombre:a?a.nombre:'—',tipo:a?a.modelo:'—',tipo_resultado:'faltante'});
+  });
+  const resumen=diffs===0?'Inventario completo — todos los activos coinciden con IT Glue':
+    [missing.length?missing.length+' faltante(s)':'',extra.length?extra.length+' tag(s) extra':''].filter(Boolean).join(', ');
+  const entry={semana,fecha:fechaFmt,colaborador:colab,escaneados:scanned.length,esperados:expectedTags.length,diffs,resumen,detalle};
   HISTORIAL.unshift(entry);
-  localStorage.setItem('inventario_historial', JSON.stringify(HISTORIAL));
-  document.getElementById('m-fecha').textContent = fechaFmt;
-  document.getElementById('m-diff').textContent = diffs;
-  document.getElementById('m-diff').style.color = diffs > 0 ? '#e24b4a' : '#27500a';
-  showToast('Inventario semana ' + semana + ' guardado ✓');
-  setTimeout(() => showSection('historial'), 800);
+  localStorage.setItem('oq_historial',JSON.stringify(HISTORIAL));
+  document.getElementById('m-fecha').textContent=fechaFmt;
+  document.getElementById('m-diff').textContent=diffs;
+  document.getElementById('m-diff').style.color=diffs>0?'#e24b4a':'#27500a';
+  showToast(`Inventario semana ${semana} guardado ✓`);
+  setTimeout(()=>showSection('historial'),800);
 }
 
-// =====================================================
-// NAVEGACIÓN Y UTILIDADES
-// =====================================================
 function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  const map = {dashboard:0, historial:1, colaboradores:2, nuevo:3};
-  if (map[id] !== undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
-  if (id === 'historial') renderHistorial();
-  if (id === 'colaboradores') renderColabs();
-  if (id === 'nuevo') initNuevo();
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  const map={dashboard:0,historial:1,colaboradores:2,nuevo:3};
+  if(map[id]!==undefined) document.querySelectorAll('.nav-btn')[map[id]].classList.add('active');
+  if(id==='historial') renderHistorial();
+  if(id==='colaboradores'){renderColabs();document.getElementById('colab-search').value='';}
+  if(id==='nuevo') initNuevo();
 }
 
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
+  const t=document.getElementById('toast');
+  t.textContent=msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// Arranca
 cargarDatos();
 </script>
 </body>
