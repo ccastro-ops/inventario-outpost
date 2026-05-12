@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inventario Semanal — Outpost QA</title>
- <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzFhMWExYSIvPgogIDxyZWN0IHg9IjYiIHk9IjEzIiB3aWR0aD0iMjAiIGhlaWdodD0iMTMiIHJ4PSIyIiBmaWxsPSJ3aGl0ZSIvPgogIDxyZWN0IHg9IjYiIHk9IjkiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiByeD0iMSIgZmlsbD0iIzg4OCIvPgogIDxyZWN0IHg9IjEzIiB5PSIxMyIgd2lkdGg9IjYiIGhlaWdodD0iNCIgcng9IjEiIGZpbGw9IiMxYTFhMWEiLz4KICA8cmVjdCB4PSI5IiB5PSI3IiB3aWR0aD0iMTQiIGhlaWdodD0iMyIgcng9IjEiIGZpbGw9IiM1NTUiLz4KPC9zdmc+">
+<title>Weekly Inventory — Outpost QA</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:14px}
@@ -111,36 +110,36 @@
 
 <div class="topbar">
   <div>
-    <div class="topbar-title">Inventario semanal — Outpost QA</div>
-    <div class="topbar-sub" id="sync-status">Cargando datos de IT Glue...</div>
+    <div class="topbar-title">Weekly Inventory — Outpost QA</div>
+    <div class="topbar-sub" id="sync-status">Loading IT Glue data...</div>
   </div>
   <div class="flex-row">
-    <button class="btn btn-sm" onclick="recargarDatos()">↻ Sincronizar</button>
-    <button class="btn btn-dark" onclick="showSection('nuevo')">+ Nuevo inventario</button>
+    <button class="btn btn-sm" onclick="recargarDatos()">↻ Sync</button>
+    <button class="btn btn-dark" onclick="showSection('nuevo')">+ New Inventory</button>
   </div>
 </div>
 
 <div class="main">
   <div class="nav">
     <button class="nav-btn active" onclick="showSection('dashboard')">📊 Dashboard</button>
-    <button class="nav-btn" onclick="showSection('historial')">📅 Historial</button>
-    <button class="nav-btn" onclick="showSection('colaboradores')">👥 Colaboradores</button>
-    <button class="nav-btn" onclick="showSection('nuevo')">➕ Nuevo inventario</button>
+    <button class="nav-btn" onclick="showSection('historial')">📅 History</button>
+    <button class="nav-btn" onclick="showSection('colaboradores')">👥 Team Members</button>
+    <button class="nav-btn" onclick="showSection('nuevo')">➕ New Inventory</button>
   </div>
 
   <!-- DASHBOARD -->
   <div id="sec-dashboard" class="section active">
     <div class="metrics">
-      <div class="metric"><div class="metric-label">Total activos</div><div class="metric-val" id="m-total">—</div></div>
-      <div class="metric"><div class="metric-label">Colaboradores</div><div class="metric-val" id="m-colab">—</div></div>
-      <div class="metric"><div class="metric-label">Último inventario</div><div class="metric-val" style="font-size:15px;padding-top:4px" id="m-fecha">—</div></div>
-      <div class="metric"><div class="metric-label">Diferencias</div><div class="metric-val" id="m-diff" style="color:#27500a">—</div></div>
+      <div class="metric"><div class="metric-label">Total Assets</div><div class="metric-val" id="m-total">—</div></div>
+      <div class="metric"><div class="metric-label">Team Members</div><div class="metric-val" id="m-colab">—</div></div>
+      <div class="metric"><div class="metric-label">Last Inventory</div><div class="metric-val" style="font-size:15px;padding-top:4px" id="m-fecha">—</div></div>
+      <div class="metric"><div class="metric-label">Differences</div><div class="metric-val" id="m-diff" style="color:#27500a">—</div></div>
     </div>
     <div class="card" id="dashboard-content">
-      <div class="loading"><span class="spinner"></span>Conectando con IT Glue...</div>
+      <div class="loading"><span class="spinner"></span>Connecting to IT Glue...</div>
     </div>
     <div class="card" id="alertas-card" style="display:none">
-      <div class="card-title">Alertas del último inventario</div>
+      <div class="card-title">Last Inventory Alerts</div>
       <div id="alertas-content"></div>
     </div>
   </div>
@@ -149,7 +148,7 @@
   <div id="sec-historial" class="section">
     <div class="card">
       <div class="card-title">
-        Historial de inventarios
+        Inventory History
         <span style="font-size:12px;color:#aaa;font-weight:400" id="hist-count"></span>
       </div>
       <div id="hist-list"></div>
@@ -160,52 +159,52 @@
   <div id="sec-colaboradores" class="section">
     <div class="card">
       <div class="card-title">
-        Activos por colaborador
+        Assets by Team Member
         <span style="font-size:12px;color:#aaa;font-weight:400" id="colab-sync-info"></span>
       </div>
-      <input type="text" class="search-box" placeholder="🔍 Buscar colaborador..." oninput="filtrarColabs(this.value)" id="colab-search">
-      <div id="colab-list"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
+      <input type="text" class="search-box" placeholder="🔍 Search team member..." oninput="filtrarColabs(this.value)" id="colab-search">
+      <div id="colab-list"><div class="loading"><span class="spinner"></span>Loading...</div></div>
     </div>
   </div>
 
   <!-- NUEVO INVENTARIO -->
   <div id="sec-nuevo" class="section">
     <div class="card">
-      <div class="card-title">Registrar nuevo inventario</div>
+      <div class="card-title">New Inventory</div>
       <div class="form-grid">
-        <div><label>Fecha del inventario</label><input type="date" id="inv-fecha"></div>
-        <div><label>Número de semana</label><input type="number" id="inv-semana" min="1" max="52"></div>
+        <div><label>Inventory Date</label><input type="date" id="inv-fecha"></div>
+        <div><label>Week Number</label><input type="number" id="inv-semana" min="1" max="52"></div>
       </div>
       <div style="margin-bottom:16px">
-        <label>Colaborador</label>
+        <label>Team Member</label>
         <select id="inv-colab" onchange="onColabChange()">
-          <option value="">Seleccionar colaborador...</option>
+          <option value="">Select team member...</option>
         </select>
       </div>
       <div id="expected-box" style="display:none;margin-bottom:16px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <span style="font-weight:500;font-size:12px;color:#555;text-transform:uppercase;letter-spacing:.4px">Activos esperados en IT Glue</span>
+          <span style="font-weight:500;font-size:12px;color:#555;text-transform:uppercase;letter-spacing:.4px">Expected Assets in IT Glue</span>
           <span id="expected-count" class="counter-badge">0</span>
         </div>
         <div id="expected-list"></div>
       </div>
       <hr class="divider">
       <div style="margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
-        <label style="margin:0">Tags escaneados con pistola</label>
+        <label style="margin:0">Tags scanned with barcode gun</label>
         <span id="scanned-count" style="font-size:12px;color:#aaa">0 tags</span>
       </div>
       <textarea id="tags-textarea" rows="8"
-        placeholder="Pega aquí todos los tags escaneados&#10;(uno por línea, como los exporta la pistola)&#10;&#10;Ejemplo:&#10;0001188&#10;0000416&#10;0000233"
+        placeholder="Paste all scanned tags here&#10;(one per line, as exported by the scanner)&#10;&#10;Ejemplo:&#10;0001188&#10;0000416&#10;0000233"
         oninput="onTagsInput()"
         style="font-family:monospace;font-size:13px;letter-spacing:1px;line-height:1.8"
       ></textarea>
-      <p class="scan-hint">Pega la lista completa tal como la exporta la pistola. El sistema compara automáticamente contra IT Glue.</p>
+      <p class="scan-hint">Paste the full list as exported by the scanner. The system automatically compares against IT Glue.</p>
       <div id="diff-preview" style="display:none;margin-top:16px"></div>
       <hr class="divider">
       <div class="flex-row">
-        <button class="btn btn-dark" onclick="guardarInventario()">💾 Guardar inventario</button>
-        <button class="btn" onclick="limpiarFormulario()">🗑 Limpiar</button>
-        <button class="btn" onclick="showSection('dashboard')">Cancelar</button>
+        <button class="btn btn-dark" onclick="guardarInventario()">💾 Save Inventory</button>
+        <button class="btn" onclick="limpiarFormulario()">🗑 Clear</button>
+        <button class="btn" onclick="showSection('dashboard')">Cancel</button>
       </div>
     </div>
   </div>
@@ -214,30 +213,30 @@
 <!-- MODAL EDITAR -->
 <div id="edit-modal" class="modal-overlay" style="display:none" onclick="closeEditModal(event)">
   <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-title">✏️ Editar inventario</div>
+    <div class="modal-title">✏️ Edit Inventory</div>
     <input type="hidden" id="edit-idx">
     <div class="form-grid">
-      <div><label>Fecha</label><input type="date" id="edit-fecha"></div>
-      <div><label>Semana</label><input type="number" id="edit-semana" min="1" max="52"></div>
+      <div><label>Date</label><input type="date" id="edit-fecha"></div>
+      <div><label>Week</label><input type="number" id="edit-semana" min="1" max="52"></div>
     </div>
     <div style="margin-bottom:14px">
-      <label>Colaborador</label>
+      <label>Team Member</label>
       <select id="edit-colab" onchange="onEditColabChange()">
-        <option value="">Seleccionar...</option>
+        <option value="">Select...</option>
       </select>
     </div>
     <div style="margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
-      <label style="margin:0">Tags escaneados</label>
+      <label style="margin:0">Scanned Tags</label>
       <span id="edit-scanned-count" style="font-size:12px;color:#aaa">0 tags</span>
     </div>
     <textarea id="edit-tags" rows="7"
       oninput="onEditTagsInput()"
       style="font-family:monospace;font-size:13px;letter-spacing:1px;line-height:1.8;margin-bottom:12px"
-      placeholder="Un tag por línea..."></textarea>
+      placeholder="One tag per line..."></textarea>
     <div id="edit-diff-preview" style="display:none;margin-bottom:8px"></div>
     <div class="modal-actions">
-      <button class="btn" onclick="closeEditModal()">Cancelar</button>
-      <button class="btn btn-dark" onclick="guardarEdicion()">💾 Guardar cambios</button>
+      <button class="btn" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-dark" onclick="guardarEdicion()">💾 Save Changes</button>
     </div>
   </div>
 </div>
@@ -245,11 +244,11 @@
 <!-- MODAL CONFIRMAR ELIMINAR -->
 <div id="confirm-modal" class="confirm-overlay" style="display:none" onclick="closeConfirm(event)">
   <div class="confirm-box" onclick="event.stopPropagation()">
-    <div class="confirm-title">¿Eliminar este inventario?</div>
-    <div class="confirm-sub" id="confirm-sub">Esta acción no se puede deshacer.</div>
+    <div class="confirm-title">Delete this inventory?</div>
+    <div class="confirm-sub" id="confirm-sub">This action cannot be undone.</div>
     <div class="confirm-actions">
-      <button class="btn" onclick="closeConfirm()">Cancelar</button>
-      <button class="btn btn-danger" onclick="confirmarEliminar()">Eliminar</button>
+      <button class="btn" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmarDelete()">Delete</button>
     </div>
   </div>
 </div>
@@ -269,37 +268,37 @@ let pendingDeleteIdx = null;
 // =====================================================
 async function cargarDatos() {
   try {
-    document.getElementById('sync-status').textContent = 'Sincronizando con IT Glue...';
+    document.getElementById('sync-status').textContent = 'Syncing with IT Glue...';
     const res = await fetch(`${SCRIPT_URL}?action=configs`);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     ACTIVOS_ITGLUE = data.activos || [];
-    COLABS = data.porColaborador || {};
-    const totalColab = Object.keys(COLABS).filter(k => k !== 'Sin asignar').length;
+    COLABS = data.porTeam Member || {};
+    const totalColab = Object.keys(COLABS).filter(k => k !== 'Unassigned').length;
     document.getElementById('m-total').textContent = data.total.toLocaleString();
     document.getElementById('m-colab').textContent = totalColab;
-    document.getElementById('sync-status').textContent = `Sincronizado · ${new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})} · ${data.total.toLocaleString()} activos`;
-    document.getElementById('colab-sync-info').textContent = `${data.total.toLocaleString()} activos · ${totalColab} colaboradores`;
+    document.getElementById('sync-status').textContent = `Synced · ${new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})} · ${data.total.toLocaleString()} assets`;
+    document.getElementById('colab-sync-info').textContent = `${data.total.toLocaleString()} assets · ${totalColab} team members`;
     populateColabSelect();
     populateEditColabSelect();
     renderDashboard();
     if(document.getElementById('sec-colaboradores').classList.contains('active')) renderColabs();
   } catch(err) {
-    document.getElementById('sync-status').textContent = 'Error al conectar con IT Glue';
+    document.getElementById('sync-status').textContent = 'Failed to connect to IT Glue';
     document.getElementById('dashboard-content').innerHTML = `
       <div class="alert-item alert-danger">
         <div>
-          <div class="alert-title">No se pudo conectar con IT Glue</div>
+          <div class="alert-title">Could not connect to IT Glue</div>
           <div class="alert-sub">${err.message}</div>
-          <button class="btn btn-sm" onclick="recargarDatos()" style="margin-top:8px">↻ Reintentar</button>
+          <button class="btn btn-sm" onclick="recargarDatos()" style="margin-top:8px">↻ Retry</button>
         </div>
       </div>`;
   }
 }
 
 function recargarDatos() {
-  document.getElementById('dashboard-content').innerHTML = '<div class="loading"><span class="spinner"></span>Reconectando...</div>';
-  document.getElementById('colab-list').innerHTML = '<div class="loading"><span class="spinner"></span>Cargando...</div>';
+  document.getElementById('dashboard-content').innerHTML = '<div class="loading"><span class="spinner"></span>Reconnecting...</div>';
+  document.getElementById('colab-list').innerHTML = '<div class="loading"><span class="spinner"></span>Loading...</div>';
   cargarDatos();
 }
 
@@ -314,10 +313,10 @@ function renderDashboard() {
     document.getElementById('m-diff').style.color = ul.diffs > 0 ? '#e24b4a' : '#27500a';
     renderAlertas(ul);
   } else {
-    document.getElementById('m-fecha').textContent = 'Sin registros';
+    document.getElementById('m-fecha').textContent = 'No records';
     document.getElementById('m-diff').textContent = '—';
   }
-  const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar').sort();
+  const nombres = Object.keys(COLABS).filter(k => k !== 'Unassigned').sort();
   const tbody = nombres.map(nombre => {
     const activos = COLABS[nombre] || [];
     const tipos = [...new Set(activos.map(a => a.modelo))].slice(0,3).join(', ');
@@ -325,15 +324,15 @@ function renderDashboard() {
   }).join('');
   document.getElementById('dashboard-content').innerHTML = `
     <div class="card-title">
-      Activos registrados en IT Glue
-      <input type="text" class="search-box" style="width:220px;margin:0" placeholder="🔍 Buscar..." oninput="filtrarDashboard(this.value)">
+      Assets registered in IT Glue
+      <input type="text" class="search-box" style="width:220px;margin:0" placeholder="🔍 Search..." oninput="filtrarDashboard(this.value)">
     </div>
     <table>
       <thead><tr>
-        <th style="width:35%" onclick="sortDashboard('nombre')">Colaborador ↕</th>
-        <th style="width:12%;text-align:center" onclick="sortDashboard('activos')">Activos ↕</th>
-        <th>Tipos de dispositivo</th>
-        <th style="width:15%">Fuente</th>
+        <th style="width:35%" onclick="sortDashboard('nombre')">Team Member ↕</th>
+        <th style="width:12%;text-align:center" onclick="sortDashboard('activos')">Assets ↕</th>
+        <th>Device Types</th>
+        <th style="width:15%">Source</th>
       </tr></thead>
       <tbody id="dashboard-tbody">${tbody}</tbody>
     </table>`;
@@ -346,7 +345,7 @@ function filtrarDashboard(q) {
 }
 
 function sortDashboard(campo) {
-  const nombres = Object.keys(COLABS).filter(k => k !== 'Sin asignar');
+  const nombres = Object.keys(COLABS).filter(k => k !== 'Unassigned');
   if(campo === 'nombre') nombres.sort();
   else nombres.sort((a,b) => (COLABS[b]||[]).length - (COLABS[a]||[]).length);
   document.getElementById('dashboard-tbody').innerHTML = nombres.map(nombre => {
@@ -365,7 +364,7 @@ function renderAlertas(inv) {
   document.getElementById('alertas-content').innerHTML = alertas.map(a=>`
     <div class="alert-item ${a.tipo_resultado==='faltante'?'alert-danger':'alert-warn'}">
       <div>
-        <div class="alert-title">${a.tipo_resultado==='faltante'?'✗ Faltante':'+ Tag extra'}</div>
+        <div class="alert-title">${a.tipo_resultado==='faltante'?'✗ Missing':'+ Extra tag'}</div>
         <div class="alert-sub"><span class="tag">${a.assetTag}</span> ${a.nombre} · ${inv.colaborador}</div>
       </div>
     </div>`).join('');
@@ -376,9 +375,9 @@ function renderAlertas(inv) {
 // =====================================================
 function renderColabs(filtro) {
   const c = document.getElementById('colab-list');
-  let nombres = Object.keys(COLABS).filter(k=>k!=='Sin asignar').sort();
+  let nombres = Object.keys(COLABS).filter(k=>k!=='Unassigned').sort();
   if(filtro) nombres = nombres.filter(n=>n.toLowerCase().includes(filtro.toLowerCase()));
-  if(nombres.length===0){c.innerHTML=`<div class="loading" style="color:#aaa">${filtro?'No se encontraron colaboradores.':'No hay datos.'}</div>`;return;}
+  if(nombres.length===0){c.innerHTML=`<div class="loading" style="color:#aaa">${filtro?'No se encontraron team members.':'No data.'}</div>`;return;}
   c.innerHTML = nombres.map((nombre,i)=>{
     const activos = COLABS[nombre]||[];
     const initials = nombre.split(' ').map(n=>n[0]).filter(Boolean).slice(0,2).join('').toUpperCase();
@@ -389,7 +388,7 @@ function renderColabs(filtro) {
           <div class="avatar">${initials}</div>
           <div style="flex:1;min-width:0">
             <div style="font-weight:500;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nombre}</div>
-            <div style="font-size:12px;color:#888">${activos.length} activos · ${tipos.slice(0,3).join(', ')}</div>
+            <div style="font-size:12px;color:#888">${activos.length} assets · ${tipos.slice(0,3).join(', ')}</div>
           </div>
           <span style="font-size:11px;color:#bbb;flex-shrink:0">▾</span>
         </div>
@@ -397,9 +396,9 @@ function renderColabs(filtro) {
           <table style="margin-top:8px">
             <thead><tr>
               <th style="width:18%">Asset Tag</th>
-              <th style="width:38%">Nombre</th>
-              <th style="width:22%">Tipo</th>
-              <th>Estado</th>
+              <th style="width:38%">Name</th>
+              <th style="width:22%">Type</th>
+              <th>Status</th>
             </tr></thead>
             <tbody>${activos.map(a=>`<tr>
               <td><span class="tag">${a.assetTag||'—'}</span></td>
@@ -421,25 +420,25 @@ function toggleColab(id){const el=document.getElementById(id);if(el)el.classList
 // =====================================================
 function renderHistorial() {
   const c = document.getElementById('hist-list');
-  document.getElementById('hist-count').textContent = HISTORIAL.length > 0 ? `${HISTORIAL.length} registro${HISTORIAL.length!==1?'s':''}` : '';
+  document.getElementById('hist-count').textContent = HISTORIAL.length > 0 ? `${HISTORIAL.length} record${HISTORIAL.length!==1?'s':''}` : '';
   if(HISTORIAL.length===0){
-    c.innerHTML='<div class="loading" style="color:#aaa;padding:24px">No hay inventarios registrados aún.</div>';
+    c.innerHTML='<div class="loading" style="color:#aaa;padding:24px">No inventory records yet.</div>';
     return;
   }
   c.innerHTML = HISTORIAL.map((h,i)=>`
     <div class="hist-item">
       <div class="hist-row">
         <div class="hist-row-left" onclick="toggleHist(${i})">
-          <div class="week-badge">S${h.semana}</div>
+          <div class="week-badge">W${h.semana}</div>
           <div style="min-width:0">
             <div style="font-weight:500;font-size:13px">${h.fecha}</div>
-            <div style="font-size:12px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.colaborador} · ${h.escaneados} escaneados / ${h.esperados} esperados</div>
+            <div style="font-size:12px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.colaborador} · ${h.escaneados} scanned / ${h.esperados} expected</div>
           </div>
         </div>
         <div class="hist-row-actions">
-          <span class="badge ${h.diffs===0?'badge-ok':'badge-warn'}" style="cursor:default">${h.diffs===0?'✓ Sin dif.':h.diffs+' dif.'}</span>
+          <span class="badge ${h.diffs===0?'badge-ok':'badge-warn'}" style="cursor:default">${h.diffs===0?'✓ No diff.':h.diffs+' dif.'}</span>
           <button class="btn-icon" title="Editar" onclick="abrirEditar(${i})">✏️</button>
-          <button class="btn-icon delete" title="Eliminar" onclick="pedirConfirmar(${i})">🗑</button>
+          <button class="btn-icon delete" title="Delete" onclick="pedirConfirmar(${i})">🗑</button>
         </div>
       </div>
       <div id="hd-${i}" class="hist-detail">
@@ -450,15 +449,15 @@ function renderHistorial() {
             <table style="font-size:12px">
               <thead><tr>
                 <th style="width:18%">Asset Tag</th>
-                <th style="width:38%">Nombre</th>
-                <th style="width:20%">Tipo</th>
-                <th>Resultado</th>
+                <th style="width:38%">Name</th>
+                <th style="width:20%">Type</th>
+                <th>Result</th>
               </tr></thead>
               <tbody>${h.detalle.map(d=>`<tr>
                 <td><span class="tag">${d.assetTag||'—'}</span></td>
                 <td>${d.nombre||'—'}</td>
                 <td>${d.tipo||'—'}</td>
-                <td><span class="badge ${d.tipo_resultado==='ok'?'badge-ok':d.tipo_resultado==='faltante'?'badge-danger':'badge-warn'}">${d.tipo_resultado==='ok'?'✓ OK':d.tipo_resultado==='faltante'?'✗ Faltante':'+ Extra'}</span></td>
+                <td><span class="badge ${d.tipo_resultado==='ok'?'badge-ok':d.tipo_resultado==='faltante'?'badge-danger':'badge-warn'}">${d.tipo_resultado==='ok'?'✓ OK':d.tipo_resultado==='faltante'?'✗ Missing':'+ Extra'}</span></td>
               </tr>`).join('')}</tbody>
             </table>
           </div>` : ''}
@@ -475,11 +474,11 @@ function toggleHist(i){document.getElementById('hd-'+i).classList.toggle('open')
 function pedirConfirmar(i) {
   pendingDeleteIdx = i;
   const h = HISTORIAL[i];
-  document.getElementById('confirm-sub').textContent = `Se eliminará el inventario de ${h.colaborador} — semana ${h.semana} (${h.fecha}). Esta acción no se puede deshacer.`;
+  document.getElementById('confirm-sub').textContent = `The inventory for ${h.colaborador} — week ${h.semana} (${h.fecha}) will be permanently deleted. This action cannot be undone.`;
   document.getElementById('confirm-modal').style.display = 'flex';
 }
 
-function confirmarEliminar() {
+function confirmarDelete() {
   if(pendingDeleteIdx === null) return;
   HISTORIAL.splice(pendingDeleteIdx, 1);
   localStorage.setItem('oq_historial', JSON.stringify(HISTORIAL));
@@ -487,7 +486,7 @@ function confirmarEliminar() {
   document.getElementById('confirm-modal').style.display = 'none';
   renderHistorial();
   renderDashboard();
-  showToast('Inventario eliminado');
+  showToast('Inventory deleted');
 }
 
 function closeConfirm(e) {
@@ -501,14 +500,14 @@ function closeConfirm(e) {
 // =====================================================
 function populateEditColabSelect() {
   const sel = document.getElementById('edit-colab');
-  const nombres = Object.keys(COLABS).filter(k=>k!=='Sin asignar').sort();
-  sel.innerHTML = '<option value="">Seleccionar...</option>' + nombres.map(n=>`<option value="${n}">${n}</option>`).join('');
+  const nombres = Object.keys(COLABS).filter(k=>k!=='Unassigned').sort();
+  sel.innerHTML = '<option value="">Select...</option>' + nombres.map(n=>`<option value="${n}">${n}</option>`).join('');
 }
 
 function abrirEditar(i) {
   const h = HISTORIAL[i];
   document.getElementById('edit-idx').value = i;
-  // Fecha: convierte "07 may 2025" de vuelta a YYYY-MM-DD
+  // Date: convierte "07 may 2025" de vuelta a YYYY-MM-DD
   try {
     const d = new Date(h.fecha.replace(/(\d+) (\w+) (\d+)/, '$1 $2 $3'));
     if(!isNaN(d)) document.getElementById('edit-fecha').valueAsDate = d;
@@ -552,23 +551,23 @@ function calcularDiffEdit() {
   if(!colab||!COLABS[colab]){box.style.display='none';return;}
   const scanned = getEditTags();
   if(scanned.length===0){box.style.display='none';return;}
-  const esperados = COLABS[colab];
-  const expectedTags = esperados.map(a=>a.assetTag).filter(Boolean);
+  const expected = COLABS[colab];
+  const expectedTags = expected.map(a=>a.assetTag).filter(Boolean);
   const missing = expectedTags.filter(t=>!scanned.includes(t));
   const extra = scanned.filter(t=>!expectedTags.includes(t));
   const ok = scanned.filter(t=>expectedTags.includes(t));
   box.style.display = 'block';
   if(missing.length===0&&extra.length===0){
-    box.innerHTML=`<div class="diff-box diff-ok" style="margin:0">✓ ${ok.length} activos confirmados — sin diferencias</div>`;
+    box.innerHTML=`<div class="diff-box diff-ok" style="margin:0">✓ ${ok.length} assets confirmed — no differences</div>`;
     return;
   }
-  let html=`<div class="diff-box diff-warn" style="margin:0"><div class="diff-title">${missing.length>0?missing.length+' faltante(s)':''}${missing.length>0&&extra.length>0?' · ':''}${extra.length>0?extra.length+' extra(s)':''}</div>`;
+  let html=`<div class="diff-box diff-warn" style="margin:0"><div class="diff-title">${missing.length>0?missing.length+' missing':''}${missing.length>0&&extra.length>0?' · ':''}${extra.length>0?extra.length+' extra(s)':''}</div>`;
   missing.forEach(t=>{
     const a=esperados.find(x=>x.assetTag===t);
     html+=`<div class="diff-line"><span class="tag">${t}</span><span style="color:#791f1f;flex:1">${a?a.nombre:'—'}</span><span class="badge badge-danger">Faltante</span></div>`;
   });
   extra.forEach(t=>{
-    html+=`<div class="diff-line"><span class="tag">${t}</span><span style="color:#633806;flex:1">No en IT Glue para este colaborador</span><span class="badge badge-warn">Extra</span></div>`;
+    html+=`<div class="diff-line"><span class="tag">${t}</span><span style="color:#633806;flex:1">Not in IT Glue for this team member</span><span class="badge badge-warn">Extra</span></div>`;
   });
   html+='</div>';
   box.innerHTML=html;
@@ -579,16 +578,16 @@ function guardarEdicion() {
   const fecha = document.getElementById('edit-fecha').value;
   const semana = parseInt(document.getElementById('edit-semana').value);
   const colab = document.getElementById('edit-colab').value;
-  if(!fecha||!semana||!colab){showToast('Completa todos los campos.');return;}
+  if(!fecha||!semana||!colab){showToast('Please fill in all fields.');return;}
   const scanned = getEditTags();
-  if(scanned.length===0){showToast('Agrega al menos un tag.');return;}
+  if(scanned.length===0){showToast('Add at least one tag.');return;}
 
-  const esperados = COLABS[colab]||[];
-  const expectedTags = esperados.map(a=>a.assetTag).filter(Boolean);
+  const expected = COLABS[colab]||[];
+  const expectedTags = expected.map(a=>a.assetTag).filter(Boolean);
   const missing = expectedTags.filter(t=>!scanned.includes(t));
   const extra = scanned.filter(t=>!expectedTags.includes(t));
   const diffs = missing.length + extra.length;
-  const fechaFmt = new Date(fecha+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  const fechaFmt = new Date(fecha+'T12:00:00').toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric'});
 
   const detalle = [];
   scanned.forEach(t=>{
@@ -601,15 +600,15 @@ function guardarEdicion() {
   });
 
   const resumen = diffs===0
-    ? 'Inventario completo — todos los activos coinciden con IT Glue'
-    : [missing.length?missing.length+' faltante(s)':'',extra.length?extra.length+' tag(s) extra':''].filter(Boolean).join(', ');
+    ? 'Inventory complete — all assets match IT Glue'
+    : [missing.length?missing.length+' missing':'',extra.length?extra.length+' extra tag(s)':''].filter(Boolean).join(', ');
 
   HISTORIAL[i] = {semana,fecha:fechaFmt,colaborador:colab,escaneados:scanned.length,esperados:expectedTags.length,diffs,resumen,detalle};
   localStorage.setItem('oq_historial',JSON.stringify(HISTORIAL));
   document.getElementById('edit-modal').style.display='none';
   renderHistorial();
   renderDashboard();
-  showToast('Inventario actualizado ✓');
+  showToast('Inventory updated ✓');
 }
 
 // =====================================================
@@ -617,8 +616,8 @@ function guardarEdicion() {
 // =====================================================
 function populateColabSelect() {
   const sel = document.getElementById('inv-colab');
-  const nombres = Object.keys(COLABS).filter(k=>k!=='Sin asignar').sort();
-  sel.innerHTML = '<option value="">Seleccionar colaborador...</option>' + nombres.map(n=>`<option value="${n}">${n}</option>`).join('');
+  const nombres = Object.keys(COLABS).filter(k=>k!=='Unassigned').sort();
+  sel.innerHTML = '<option value="">Select team member...</option>' + nombres.map(n=>`<option value="${n}">${n}</option>`).join('');
 }
 
 function initNuevo() {
@@ -653,7 +652,7 @@ function onColabChange() {
   document.getElementById('expected-count').textContent=activos.length;
   document.getElementById('expected-list').innerHTML=`
     <table style="font-size:12px;margin-top:4px">
-      <thead><tr><th style="width:20%">Asset Tag</th><th style="width:45%">Nombre</th><th>Tipo</th></tr></thead>
+      <thead><tr><th style="width:20%">Asset Tag</th><th style="width:45%">Name</th><th>Type</th></tr></thead>
       <tbody>${activos.map(a=>`<tr><td><span class="tag">${a.assetTag||'—'}</span></td><td>${a.nombre}</td><td>${a.modelo}</td></tr>`).join('')}</tbody>
     </table>`;
   if(document.getElementById('tags-textarea').value.trim()) calcularDiff();
@@ -680,25 +679,25 @@ function calcularDiff() {
   if(!colab||!COLABS[colab]){box.style.display='none';return;}
   const scanned=getTagsFromTextarea();
   if(scanned.length===0){box.style.display='none';return;}
-  const esperados=COLABS[colab];
+  const expected=COLABS[colab];
   const expectedTags=esperados.map(a=>a.assetTag).filter(Boolean);
   const missing=expectedTags.filter(t=>!scanned.includes(t));
   const extra=scanned.filter(t=>!expectedTags.includes(t));
   const ok=scanned.filter(t=>expectedTags.includes(t));
   box.style.display='block';
   if(missing.length===0&&extra.length===0){
-    box.innerHTML=`<div class="diff-box diff-ok"><div style="font-size:15px;font-weight:500;margin-bottom:4px">✓ Inventario completo</div><div style="font-size:13px">${ok.length} de ${expectedTags.length} activos confirmados</div></div>`;
+    box.innerHTML=`<div class="diff-box diff-ok"><div style="font-size:15px;font-weight:500;margin-bottom:4px">✓ Inventory complete</div><div style="font-size:13px">${ok.length} of ${expectedTags.length} assets confirmed</div></div>`;
     return;
   }
   let html=`<div class="diff-box diff-warn"><div class="diff-title">${missing.length>0?`<span style="color:#791f1f">${missing.length} faltante${missing.length!==1?'s':''}</span>`:''}${missing.length>0&&extra.length>0?' · ':''}${extra.length>0?`<span style="color:#633806">${extra.length} extra${extra.length!==1?'s':''}</span>`:''}</div>`;
-  if(ok.length>0) html+=`<div style="font-size:12px;color:#27500a;margin-bottom:8px">✓ ${ok.length} activo${ok.length!==1?'s':''} confirmado${ok.length!==1?'s':''}</div>`;
+  if(ok.length>0) html+=`<div style="font-size:12px;color:#27500a;margin-bottom:8px">✓ ${ok.length} asset${ok.length!==1?'s':''} confirmed</div>`;
   if(missing.length>0){
-    html+=`<div class="diff-section-title">✗ Faltantes</div>`;
-    missing.forEach(t=>{const a=esperados.find(x=>x.assetTag===t);html+=`<div class="diff-line"><span class="tag">${t}</span><span style="color:#791f1f;flex:1">${a?a.nombre+' · '+a.modelo:'Desconocido'}</span><span class="badge badge-danger">Faltante</span></div>`;});
+    html+=`<div class="diff-section-title">✗ Missings</div>`;
+    missing.forEach(t=>{const a=esperados.find(x=>x.assetTag===t);html+=`<div class="diff-line"><span class="tag">${t}</span><span style="color:#791f1f;flex:1">${a?a.nombre+' · '+a.modelo:'Unknown'}</span><span class="badge badge-danger">Faltante</span></div>`;});
   }
   if(extra.length>0){
     html+=`<div class="diff-section-title">+ Extras</div>`;
-    extra.forEach(t=>{const other=Object.entries(COLABS).find(([n,arr])=>n!==colab&&arr.find(a=>a.assetTag===t));const otherA=other?other[1].find(a=>a.assetTag===t):null;html+=`<div class="diff-line"><span class="tag">${t}</span><span style="color:#633806;flex:1">${other?otherA.nombre+' · asignado a '+other[0]:'No encontrado en IT Glue'}</span><span class="badge badge-warn">Extra</span></div>`;});
+    extra.forEach(t=>{const other=Object.entries(COLABS).find(([n,arr])=>n!==colab&&arr.find(a=>a.assetTag===t));const otherA=other?other[1].find(a=>a.assetTag===t):null;html+=`<div class="diff-line"><span class="tag">${t}</span><span style="color:#633806;flex:1">${other?otherA.nombre+' · assigned to '+other[0]:'Not found in IT Glue'}</span><span class="badge badge-warn">Extra</span></div>`;});
   }
   html+='</div>';
   box.innerHTML=html;
@@ -708,26 +707,26 @@ function guardarInventario() {
   const fecha=document.getElementById('inv-fecha').value;
   const semana=parseInt(document.getElementById('inv-semana').value);
   const colab=document.getElementById('inv-colab').value;
-  if(!fecha||!semana||!colab){showToast('Completa la fecha, semana y colaborador.');return;}
+  if(!fecha||!semana||!colab){showToast('Please fill in date, week and team member.');return;}
   const scanned=getTagsFromTextarea();
-  if(scanned.length===0){showToast('Pega los tags escaneados primero.');return;}
-  const esperados=COLABS[colab]||[];
+  if(scanned.length===0){showToast('Paste scanned tags first.');return;}
+  const expected=COLABS[colab]||[];
   const expectedTags=esperados.map(a=>a.assetTag).filter(Boolean);
   const missing=expectedTags.filter(t=>!scanned.includes(t));
   const extra=scanned.filter(t=>!expectedTags.includes(t));
   const diffs=missing.length+extra.length;
-  const fechaFmt=new Date(fecha+'T12:00:00').toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'});
+  const fechaFmt=new Date(fecha+'T12:00:00').toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric'});
   const detalle=[];
   scanned.forEach(t=>{const a=esperados.find(x=>x.assetTag===t);detalle.push({assetTag:t,nombre:a?a.nombre:'—',tipo:a?a.modelo:'—',tipo_resultado:a?'ok':'extra'});});
   missing.forEach(t=>{const a=esperados.find(x=>x.assetTag===t);detalle.push({assetTag:t,nombre:a?a.nombre:'—',tipo:a?a.modelo:'—',tipo_resultado:'faltante'});});
-  const resumen=diffs===0?'Inventario completo — todos los activos coinciden con IT Glue':[missing.length?missing.length+' faltante(s)':'',extra.length?extra.length+' tag(s) extra':''].filter(Boolean).join(', ');
+  const resumen=diffs===0?'Inventory complete — all assets match IT Glue':[missing.length?missing.length+' missing':'',extra.length?extra.length+' extra tag(s)':''].filter(Boolean).join(', ');
   const entry={semana,fecha:fechaFmt,colaborador:colab,escaneados:scanned.length,esperados:expectedTags.length,diffs,resumen,detalle};
   HISTORIAL.unshift(entry);
   localStorage.setItem('oq_historial',JSON.stringify(HISTORIAL));
   document.getElementById('m-fecha').textContent=fechaFmt;
   document.getElementById('m-diff').textContent=diffs;
   document.getElementById('m-diff').style.color=diffs>0?'#e24b4a':'#27500a';
-  showToast(`Inventario semana ${semana} guardado ✓`);
+  showToast(`Week ${semana} inventory saved ✓`);
   setTimeout(()=>showSection('historial'),800);
 }
 
