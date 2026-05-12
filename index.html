@@ -273,7 +273,7 @@ async function cargarDatos() {
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     ACTIVOS_ITGLUE = data.activos || [];
-    COLABS = data.porTeam Member || {};
+    COLABS = data.porColaborador || {};
     const totalColab = Object.keys(COLABS).filter(k => k !== 'Unassigned').length;
     document.getElementById('m-total').textContent = data.total.toLocaleString();
     document.getElementById('m-colab').textContent = totalColab;
