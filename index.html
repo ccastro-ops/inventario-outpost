@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Weekly Inventory — Outpost QA</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzFhMWExYSIvPgogIDxyZWN0IHg9IjYiIHk9IjEzIiB3aWR0aD0iMjAiIGhlaWdodD0iMTMiIHJ4PSIyIiBmaWxsPSJ3aGl0ZSIvPgogIDxyZWN0IHg9IjYiIHk9IjkiIHdpZHRoPSIyMCIgaGVpZ2h0PSI1IiByeD0iMSIgZmlsbD0iIzg4OCIvPgogIDxyZWN0IHg9IjEzIiB5PSIxMyIgd2lkdGg9IjYiIGhlaWdodD0iNCIgcng9IjEiIGZpbGw9IiMxYTFhMWEiLz4KICA8cmVjdCB4PSI5IiB5PSI3IiB3aWR0aD0iMTQiIGhlaWdodD0iMyIgcng9IjEiIGZpbGw9IiM1NTUiLz4KPC9zdmc+">
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:14px}
@@ -170,7 +171,7 @@
   <!-- NUEVO INVENTARIO -->
   <div id="sec-nuevo" class="section">
     <div class="card">
-      <div class="card-title">New Inventory</div>
+      <div class="card-title">New Inventory<div style="display:flex;align-items:center;gap:8px"><span id="inv-sync-status" style="font-size:12px;color:#aaa"></span><button class="btn-sm" onclick="refreshITGlueForm()" id="inv-refresh-btn">↻ Refresh IT Glue</button></div></div>
       <div class="form-grid">
         <div><label>Inventory Date</label><input type="date" id="inv-fecha"></div>
         <div><label>Week Number</label><input type="number" id="inv-semana" min="1" max="52"></div>
@@ -629,6 +630,38 @@ function initNuevo() {
   const today=new Date();
   document.getElementById('inv-fecha').valueAsDate=today;
   document.getElementById('inv-semana').value=getWeekNumber(today);
+}
+
+async function refreshITGlueForm() {
+  const btn = document.getElementById("inv-refresh-btn");
+  const status = document.getElementById("inv-sync-status");
+  const currentColab = document.getElementById("inv-colab").value;
+  btn.disabled = true;
+  btn.textContent = "↻ Syncing...";
+  status.textContent = "";
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=configs`);
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+    ACTIVOS_ITGLUE = data.activos || [];
+    COLABS = data.porColaborador || {};
+    populateColabSelect();
+    populateEditColabSelect();
+    if(currentColab && COLABS[currentColab]) {
+      document.getElementById("inv-colab").value = currentColab;
+      onColabChange();
+    }
+    const now = new Date().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"});
+    status.textContent = `Synced at ${now}`;
+    status.style.color = "#27500a";
+    btn.textContent = "✓ Refreshed";
+    setTimeout(() => { btn.textContent = "↻ Refresh IT Glue"; btn.disabled = false; }, 2000);
+  } catch(err) {
+    status.textContent = "Sync failed";
+    status.style.color = "#e24b4a";
+    btn.textContent = "↻ Refresh IT Glue";
+    btn.disabled = false;
+  }
 }
 
 function limpiarFormulario() {
